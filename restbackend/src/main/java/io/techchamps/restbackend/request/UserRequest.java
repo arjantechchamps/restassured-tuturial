@@ -9,6 +9,8 @@ public class UserRequest {
     private String username;
     private String email;
     private Set<String> roles;
+    private AddressRequest workAddress;
+    private AddressRequest homeAddress;
 
     public String getName() {
         return name;
@@ -40,5 +42,21 @@ public class UserRequest {
 
     public void setRoles(Set<String> roles) {
         this.roles = roles;
+    }
+
+    public AddressRequest getWorkAddress() {
+        return workAddress;
+    }
+
+    public void setWorkAddress(AddressRequest workAddress) {
+        this.workAddress = workAddress;
+    }
+
+    public AddressRequest getHomeAddress() {
+        return homeAddress;
+    }
+
+    public void setHomeAddress(AddressRequest homeAddress) {
+        this.homeAddress = homeAddress;
     }
 }

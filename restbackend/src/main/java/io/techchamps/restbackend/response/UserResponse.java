@@ -1,6 +1,8 @@
 package io.techchamps.restbackend.response;
 
 
+import io.techchamps.restbackend.request.AddressRequest;
+
 import java.util.Set;
 
 public class UserResponse {
@@ -9,6 +11,8 @@ public class UserResponse {
     private String username;
     private String email;
     private Set<String> roles;
+    private AddressRequest workAddress;
+    private AddressRequest homeAddress;
 
 
     public int getId() {
@@ -49,5 +53,21 @@ public class UserResponse {
 
     public void setRoles(Set<String> roles) {
         this.roles = roles;
+    }
+
+    public AddressRequest getWorkAddress() {
+        return workAddress;
+    }
+
+    public void setWorkAddress(AddressRequest workAddress) {
+        this.workAddress = workAddress;
+    }
+
+    public AddressRequest getHomeAddress() {
+        return homeAddress;
+    }
+
+    public void setHomeAddress(AddressRequest homeAddress) {
+        this.homeAddress = homeAddress;
     }
 }

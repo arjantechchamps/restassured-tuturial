@@ -41,6 +41,14 @@ public class User {
     @Size(min = 6, max = 100)
     private String password;
 
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "work_address_id", referencedColumnName = "id")
+    private Address workAddress;
+
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "home_address_id", referencedColumnName = "id")
+    private Address homeAddress;
+
     @ManyToMany(fetch = FetchType.LAZY, cascade = {
             CascadeType.PERSIST,
             CascadeType.MERGE
@@ -99,6 +107,22 @@ public class User {
 
     public void setPassword(String password) {
         this.password = password;
+    }
+
+    public Address getWorkAddress() {
+        return workAddress;
+    }
+
+    public void setWorkAddress(Address workAddress) {
+        this.workAddress = workAddress;
+    }
+
+    public Address getHomeAddress() {
+        return homeAddress;
+    }
+
+    public void setHomeAddress(Address homeAddress) {
+        this.homeAddress = homeAddress;
     }
 
     public Set<Role> getRoles() {
