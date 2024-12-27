@@ -112,12 +112,6 @@
       <artifactId>modelmapper</artifactId>
       <version>3.2.2</version>
     </dependency>
-<!--    <dependency>-->
-<!--      <groupId>org.projectlombok</groupId>-->
-<!--      <artifactId>lombok</artifactId>-->
-<!--      <version>1.18.36</version>-->
-<!--      <scope>provided</scope>-->
-<!--    </dependency>-->
 
     <!-- Testing -->
     <dependency>
@@ -129,59 +123,50 @@
   </dependencies>
 
   <build>
-    <plugins>
-      <!-- Spring Boot Plugin -->
-      <plugin>
-        <groupId>org.springframework.boot</groupId>
-        <artifactId>spring-boot-maven-plugin</artifactId>
-        <configuration>
-          <mainClass>io.techchamps.restbackend.Application</mainClass>
-          <layout>JAR</layout>
-        </configuration>
-        <executions>
-          <execution>
-            <goals>
-              <goal>repackage</goal>
-            </goals>
-          </execution>
-        </executions>
-      </plugin>
+  <plugins>
+    <plugin>
+      <groupId>org.springframework.boot</groupId>
+      <artifactId>spring-boot-maven-plugin</artifactId>
+      <executions>
+        <execution>
+          <id>pre-integration-test</id>
+          <goals>
+            <goal>start</goal>
+          </goals>
+        </execution>
+        <execution>
+          <id>post-integration-test</id>
+          <goals>
+            <goal>stop</goal>
+          </goals>
+        </execution>
+      </executions>
+    </plugin>
 
-      <!-- Docker Plugin -->
-      <plugin>
-        <groupId>io.fabric8</groupId>
-        <artifactId>docker-maven-plugin</artifactId>
-        <version>0.44.0</version>
-        <configuration>
-          <images>
-            <image>
-              <name>restbackend:${project.version}</name>
-              <build>
-                <dockerFile>${project.basedir}/Dockerfile</dockerFile>
-              </build>
-            </image>
-          </images>
-        </configuration>
-        <executions>
-          <execution>
-            <id>start</id>
-            <phase>pre-integration-test</phase>
-            <goals>
-              <goal>build</goal>
-              <goal>start</goal>
-            </goals>
-          </execution>
-          <execution>
-            <id>stop</id>
-            <phase>post-integration-test</phase>
-            <goals>
-              <goal>stop</goal>
-            </goals>
-          </execution>
-        </executions>
-      </plugin>
 
-      <!-- Maven Compiler Plugin -->
+    <!-- Springdoc OpenAPI Maven Plugin -->
+    <plugin>
+      <groupId>org.springdoc</groupId>
+      <artifactId>springdoc-openapi-maven-plugin</artifactId>
+      <version>1.4</version>
+      <executions>
+        <execution>
+          <id>generate-openapi</id>
+          <phase>integration-test</phase>
+          <goals>
+            <goal>generate</goal>
+          </goals>
+        </execution>
+      </executions>
+      <configuration>
+        <apiDocsUrl>http://localhost:8085/v3/api-docs.yaml</apiDocsUrl>
+        <outputFileName>openapi.yaml</outputFileName>
+        <skip>false</skip>
+      </configuration>
+    </plugin>
+
+
+    <!-- Maven Compiler Plugin -->
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-compiler-plugin</artifactId>
@@ -208,4 +193,5 @@
       </plugin>
     </plugins>
   </build>
+
 </project>

@@ -14,6 +14,10 @@
 
 ## Start Back-end local
 
+## Generate open-api.yaml file
+- make sure the application is running
+- run from terminal `mvn springdoc-openapi:generate`
+
 ### Backend:
   - in folder restbackend go to src/main/resources/java/Application.java
   - run application main class
