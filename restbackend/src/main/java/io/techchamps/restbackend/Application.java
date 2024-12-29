@@ -8,7 +8,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
 
 @SpringBootApplication
-@OpenAPIDefinition(info = @Info(title = "Backend API", version = "2.0", description = "TECHCHAMPS CASUS BACKEND API"))
+@OpenAPIDefinition(info = @Info(title = "Backend API", version = "2.0", description = "TUTORIAL BACKEND API"))
 public class Application {
 
     public static void main(String[] args) {

@@ -12,5 +12,6 @@
   </properties>
   <modules>
     <module>restbackend</module>
+    <module>tutorial</module>
   </modules>
 </project>

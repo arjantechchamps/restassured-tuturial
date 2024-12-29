@@ -175,8 +175,8 @@ class UserApiTest {
 
         // Assert
         assertNotNull(response);
-        assertEquals(200, response.getStatusCodeValue());
-        assertEquals("newuser@test.com", response.getBody().getEmail());
+        assertEquals(200, response.getStatusCode().value());
+        assertEquals("newuser@test.com", Objects.requireNonNull(response.getBody()).getEmail());
 
         verify(userService, times(1)).save(user);
         verify(roleRepository, times(1)).findByName(RoleName.ROLE_USER);
