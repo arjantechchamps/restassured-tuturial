@@ -1,5 +1,6 @@
 package io.techchamps.restbackend.repository;
 
+
 import io.techchamps.restbackend.entity.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
@@ -16,4 +17,9 @@ public interface UserRepository extends JpaRepository<User, Integer> {
 
     Boolean existsByEmail(String email);
 
+    @Query("select u.workAddress.id from User u where u.id = ?1")
+    Optional<Integer> findWorkAddressIdByUserId(Integer userId);
+
+    @Query("select u.homeAddress.id from User u where u.id = ?1")
+    Optional<Integer> findHomeAddressIdByUserId(Integer userId);
 }

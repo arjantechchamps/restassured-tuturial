@@ -3,13 +3,13 @@ INSERT INTO roles(name) VALUES('ROLE_USER');
 INSERT INTO roles(name) VALUES('ROLE_MODERATOR');
 INSERT INTO roles(name) VALUES('ROLE_ADMIN');
 
-INSERT INTO ADDRESSES(id, street, city, state, zipcode,country) VALUES
-(1, '123 Maple Street', 'Springfield', 'Illinois', '62701', 'USA'),
-(2, '456 Oak Avenue', 'Springfield', 'Illinois', '62702', 'USA'),
-(3, '789 Pine Road', 'Riverdale', 'New York', '10463', 'USA'),
-(4, '321 Birch Lane', 'Riverdale', 'New York', '10464', 'USA'),
-(5, '12 Elm Street', 'Brooklyn', 'New York', '11201', 'USA'),
-(6, '34 Maple Avenue', 'Brooklyn', 'New York', '11201', 'USA');
+INSERT INTO ADDRESSES(id, street, city, state, zipcode,country,type) VALUES
+(1, '123 Maple Street', 'Springfield', 'Illinois', '62701', 'USA','HOME'),
+(2, '456 Oak Avenue', 'Springfield', 'Illinois', '62702', 'USA','WORK'),
+(3, '789 Pine Road', 'Riverdale', 'New York', '10463', 'USA','HOME'),
+(4, '321 Birch Lane', 'Riverdale', 'New York', '10464', 'USA','WORK'),
+(5, '12 Elm Street', 'Brooklyn', 'New York', '11201', 'USA','HOME'),
+(6, '34 Maple Avenue', 'Brooklyn', 'New York', '11201', 'USA','WORK');
 
 
 -- Insert default users

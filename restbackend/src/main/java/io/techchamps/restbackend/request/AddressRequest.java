@@ -1,14 +1,25 @@
 package io.techchamps.restbackend.request;
 
-public class AddressRequest {
+import io.techchamps.restbackend.enums.AddressType;
 
+public class AddressRequest {
+        private Integer id;
         private String street;
         private String city;
         private String state;
         private String zipcode;
         private String country;
+        private AddressType type;
 
-        // Getters and Setters
+    public Integer getId() {
+        return id;
+    }
+
+    public void setId(Integer id) {
+        this.id = id;
+    }
+
+    // Getters and Setters
         public String getStreet() {
             return street;
         }
@@ -48,4 +59,12 @@ public class AddressRequest {
         public void setCountry(String country) {
             this.country = country;
         }
+
+    public AddressType getType() {
+        return type;
+    }
+
+    public void setType(AddressType type) {
+        this.type = type;
+    }
 }

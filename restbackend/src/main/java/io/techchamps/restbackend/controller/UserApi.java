@@ -16,7 +16,6 @@ import jakarta.validation.constraints.Min;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -148,11 +147,13 @@ public class UserApi {
             return null;
         }
         AddressRequest response = new AddressRequest();
+        response.setId(address.getId());
         response.setStreet(address.getStreet());
         response.setCity(address.getCity());
         response.setState(address.getState());
         response.setZipcode(address.getZipcode());
         response.setCountry(address.getCountry());
+        response.setType(address.getType());
         return response;
     }
 

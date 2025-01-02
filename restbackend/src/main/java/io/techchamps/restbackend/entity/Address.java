@@ -1,5 +1,6 @@
 package io.techchamps.restbackend.entity;
 
+import io.techchamps.restbackend.enums.AddressType;
 import jakarta.persistence.*;
 
 @Entity
@@ -8,19 +9,21 @@ public class Address {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private int id;
 
     private String street;
     private String city;
     private String state;
     private String zipcode;
     private String country;
+    @Enumerated(EnumType.STRING)
+    private AddressType type;
 
-    public Long getId() {
+    public int getId() {
         return id;
     }
 
-    public void setId(Long id) {
+    public void setId(int id) {
         this.id = id;
     }
 
@@ -62,5 +65,13 @@ public class Address {
 
     public void setCountry(String country) {
         this.country = country;
+    }
+
+    public AddressType getType() {
+        return type;
+    }
+
+    public void setType(AddressType type) {
+        this.type = type;
     }
 }
