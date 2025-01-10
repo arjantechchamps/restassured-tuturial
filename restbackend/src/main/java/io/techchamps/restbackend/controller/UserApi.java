@@ -1,6 +1,7 @@
 package io.techchamps.restbackend.controller;
 
 import io.techchamps.restbackend.config.Constants;
+import io.techchamps.restbackend.entity.Address;
 import io.techchamps.restbackend.entity.Role;
 import io.techchamps.restbackend.entity.RoleName;
 import io.techchamps.restbackend.entity.User;
@@ -15,7 +16,6 @@ import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
@@ -97,6 +97,13 @@ public class UserApi {
 
             // Encrypt password (using PasswordEncoder)
             user.setPassword(encoder.encode(userRequest.getPassword()));
+            // Map and set home and work addresses
+            Address homeAddress = modelMapper.map(userRequest.getHomeAddress(), Address.class);
+            Address workAddress = modelMapper.map(userRequest.getWorkAddress(), Address.class);
+            homeAddress.setId(0); // Explicitly set to null to ensure a new ID is generated
+            workAddress.setId(0);
+            user.setHomeAddress(homeAddress);
+            user.setWorkAddress(workAddress);
 
             // Save user
             userService.save(user);

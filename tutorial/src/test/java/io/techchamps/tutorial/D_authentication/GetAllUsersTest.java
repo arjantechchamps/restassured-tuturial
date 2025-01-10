@@ -1,5 +1,6 @@
-package io.techchamps.tutorial;
+package io.techchamps.tutorial.D_authentication;
 
+import io.techchamps.tutorial.C_helperclass.Helper;
 import org.junit.jupiter.api.Test;
 
 import static io.restassured.RestAssured.given;
@@ -43,5 +44,4 @@ public class GetAllUsersTest {
                 .then().assertThat().statusCode(200)
                 .log().all();
     }
-
 }

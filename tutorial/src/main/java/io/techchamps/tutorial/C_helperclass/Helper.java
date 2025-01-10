@@ -1,9 +1,8 @@
-package io.techchamps.tutorial;
+package io.techchamps.tutorial.C_helperclass;
 
 import io.restassured.builder.RequestSpecBuilder;
 import io.restassured.specification.RequestSpecification;
 
-import static io.restassured.RestAssured.given;
 
 public class Helper {
 

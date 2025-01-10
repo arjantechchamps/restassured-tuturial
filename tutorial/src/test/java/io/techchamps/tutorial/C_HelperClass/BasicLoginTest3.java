@@ -1,30 +1,17 @@
-package io.techchamps.tutorial;
+package io.techchamps.tutorial.C_HelperClass;
 
-import io.restassured.builder.RequestSpecBuilder;
-import io.restassured.specification.RequestSpecification;
-import org.junit.jupiter.api.BeforeEach;
+import io.techchamps.tutorial.C_helperclass.Helper;
 import org.junit.jupiter.api.Test;
 
 import static io.restassured.RestAssured.given;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.notNullValue;
 
-public class BasicLoginTest2 {
-    private RequestSpecification requestSpecification;
-
-    @BeforeEach
-    public void setup() {
-        requestSpecification = new RequestSpecBuilder()
-                .setBaseUri("http://localhost")
-                .setPort(8085)
-                .setBasePath("/api")
-                .addHeader("Content-Type", "application/json")
-                .build();
-    }
+public class BasicLoginTest3 {
 
     @Test
     public void loginWithValidCredentials() {
-        given().spec(requestSpecification)
+        given().spec(Helper.createBasicRequestSpecification())
                 .log().all() // log request
                 .body("""
                         {
@@ -43,7 +30,7 @@ public class BasicLoginTest2 {
 
     @Test
     public void loginWithInValidCredentials() {
-        given().spec(requestSpecification)
+        given().spec(Helper.createBasicRequestSpecification())
                 .log().all() // log request
                 .body("""
                         {
@@ -53,7 +40,7 @@ public class BasicLoginTest2 {
                 .when()
                 .post("/auth/signin")
                 .then()
-                .log().all()
+                .log().all() // Log response
                 .assertThat().statusCode(401)
                 .body("error", equalTo("authentication_error"))
                 .body("message",equalTo("Invalid username or password"));
