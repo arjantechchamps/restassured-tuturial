@@ -162,9 +162,9 @@ class UserApiTest {
         // Mock roles
         Role userRole = new Role();
         userRole.setId(1L);
-        userRole.setName(RoleName.ROLE_USER);
+        userRole.setName(RoleName.USER);
 
-        when(roleRepository.findByName(RoleName.ROLE_USER)).thenReturn(Optional.of(userRole));
+        when(roleRepository.findByName(RoleName.USER)).thenReturn(Optional.of(userRole));
         when(modelMapper.map(userRequest, User.class)).thenReturn(user);
         when(encoder.encode(anyString())).thenReturn("encoded_password");
         when(userService.save(user)).thenReturn(user);
@@ -179,7 +179,7 @@ class UserApiTest {
         assertEquals("newuser@test.com", Objects.requireNonNull(response.getBody()).getEmail());
 
         verify(userService, times(1)).save(user);
-        verify(roleRepository, times(1)).findByName(RoleName.ROLE_USER);
+        verify(roleRepository, times(1)).findByName(RoleName.USER);
     }
 
     @Test

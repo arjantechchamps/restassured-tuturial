@@ -105,7 +105,7 @@ public class AuthAPI {
             }
         } else {
             // Assign default role
-            Role userRole = roleRepository.findByName(RoleName.ROLE_USER)
+            Role userRole = roleRepository.findByName(RoleName.USER)
                     .orElseThrow(() -> new RuntimeException("ERROR: Default role not found"));
             roles.add(userRole);
         }

@@ -103,7 +103,7 @@ class IUserTest {
     }
 
     private static User mockedUser() {
-        Set<Role> roles = Set.of(new Role(RoleName.ROLE_USER));
+        Set<Role> roles = Set.of(new Role(RoleName.USER));
         User user = new User("UnitTest", "UnitTest", "unitTest@example.com", "Unit1234!");
         user.setId(1);
         user.setRoles(roles);

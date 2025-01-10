@@ -83,7 +83,7 @@ public class AddressService {
 
         // Check if the authenticated user has the ROLE_ADMIN authority
         boolean isAdmin = userPrinciple.getAuthorities().stream()
-                .anyMatch(auth -> auth.getAuthority().equals("ROLE_ADMIN"));
+                .anyMatch(auth -> auth.getAuthority().equals("ADMIN"));
 
         // If the user is not an admin, ensure they are accessing their own data
         if (!isAdmin && userPrinciple.getId() != userId) {

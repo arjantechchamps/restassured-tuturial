@@ -83,7 +83,7 @@ class AuthApiTest {
         signUpRequest.setUsername("register");
         signUpRequest.setEmail("john@example.com");
         signUpRequest.setPassword("password123");
-        signUpRequest.setRoles(new HashSet<>(Arrays.asList("ROLE_USER")));
+        signUpRequest.setRoles(new HashSet<>(Arrays.asList("USER")));
 
         when(userRepository.existsByUsername("register")).thenReturn(true);
 
@@ -127,7 +127,7 @@ class AuthApiTest {
                 "UnitTest",
                 "unitTest@example.com",
                 "unit1234!",
-                List.of(new SimpleGrantedAuthority("ROLE_USER"),new SimpleGrantedAuthority("ROLE_ADMIN"))
+                List.of(new SimpleGrantedAuthority("USER"),new SimpleGrantedAuthority("USER"))
         );
     }
 }

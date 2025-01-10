@@ -84,13 +84,13 @@ public class UserApi {
         Set<Role> roles = new HashSet<>();
         Set<String> strRoles = userRequest.getRoles();
         if (strRoles == null) {
-            roles.add(getRole(RoleName.ROLE_USER));
+            roles.add(getRole(RoleName.USER));
         } else {
             for (String role : strRoles) {
                 switch (role.toLowerCase()) {
-                    case "admin" -> roles.add(getRole(RoleName.ROLE_ADMIN));
-                    case "moderator", "pm" -> roles.add(getRole(RoleName.ROLE_MODERATOR));
-                    default -> roles.add(getRole(RoleName.ROLE_USER));
+                    case "admin" -> roles.add(getRole(RoleName.ADMIN));
+                    case "moderator", "pm" -> roles.add(getRole(RoleName.MODERATOR));
+                    default -> roles.add(getRole(RoleName.USER));
                 }
             }
         }

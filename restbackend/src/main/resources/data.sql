@@ -1,7 +1,7 @@
 -- Insert default roles
-INSERT INTO roles(name) VALUES('ROLE_USER');
-INSERT INTO roles(name) VALUES('ROLE_MODERATOR');
-INSERT INTO roles(name) VALUES('ROLE_ADMIN');
+INSERT INTO roles(name) VALUES('USER');
+INSERT INTO roles(name) VALUES('MODERATOR');
+INSERT INTO roles(name) VALUES('ADMIN');
 
 INSERT INTO ADDRESSES(id, street, city, state, zipcode,country,type) VALUES
 (1, '123 Maple Street', 'Springfield', 'Illinois', '62701', 'USA','HOME'),
