@@ -54,7 +54,8 @@ public class BasicLoginTest2 {
                 .post("/auth/signin")
                 .then()
                 .log().all()
-                .assertThat().statusCode(404)
-                .body("error", equalTo("You do not have permission to access this resource."));
+                .assertThat().statusCode(401)
+                .body("error", equalTo("authentication_error"))
+                .body("message",equalTo("Invalid username or password"));
     }
 }

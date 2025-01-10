@@ -8,6 +8,7 @@ public class UserRequest {
     private String name;
     private String username;
     private String email;
+    public String password;
     private Set<String> roles;
     private AddressRequest workAddress;
     private AddressRequest homeAddress;
@@ -38,6 +39,14 @@ public class UserRequest {
 
     public Set<String> getRoles() {
         return roles;
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
     }
 
     public void setRoles(Set<String> roles) {

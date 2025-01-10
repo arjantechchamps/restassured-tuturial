@@ -1,74 +1,62 @@
 package io.techchamps.tutorial;
 
 
+import io.restassured.builder.RequestSpecBuilder;
 import io.restassured.response.Response;
+import io.restassured.specification.RequestSpecification;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import static io.restassured.RestAssured.given;
 import static org.hamcrest.Matchers.equalTo;
-import static org.hamcrest.Matchers.notNullValue;
+import static org.hamcrest.Matchers.notNullValue;;
 
 public class BasicUserTest {
 
-    @Test
-    public void createUser() {
-        given()
-                .log().all() // log request
-                .header("Content-type", "application/json")
-                .baseUri("http://localhost")
-                .port(8085)
-                .basePath("/api")
-                .body("""
-                        {
-                          "name": "testuser",
-                          "username": "testuser",
-                          "email": "testuser@test.nl",
-                          "password": "test1234",
-                          "roles": [
-                            "USER"
-                          ]
-                        }""")
-                .when()
-                .post("auth/signup")
-                .then()
-                .log().all()
-                .assertThat().statusCode(200);
+    private RequestSpecification requestSpecification;
+
+    @BeforeEach
+    public void createBasicRequestSpecification() {
+        requestSpecification = new RequestSpecBuilder()
+                .setBaseUri("http://localhost")
+                .setPort(8085)
+                .setBasePath("/api")
+                .addHeader("Content-Type", "application/json")
+                .build();
     }
 
     @Test
-    public void createUserAdvanced() {
+    //This doesn't work because we need to authenticate first so how do we do that?
+    public void getAllUsers() {
+        given().spec(requestSpecification)
+                .log().all() // log request
+                .when().get("/users")
+                .then().assertThat().statusCode(200)
+                .log().all();
+    }
+    @Test
+    public void getAllUsersWithAuthentication() {
 
-        String token =
-                given()
-                        .log().all() // log request
-                        .header("Content-type", "application/json")
-                        .baseUri("http://localhost")
-                        .port(8085)
-                        .basePath("/api")
-                        .body("""
+        String token =  given().spec(requestSpecification)
+                .log().all() // log request
+                .body("""
                         {
                           "username": "admin",
                           "password": "admin1234"
                         }""")
-                        .when()
-                        .post("/auth/signin")
-                        .then()
-                        .log().all()
-                        .assertThat().statusCode(200)
-                        .extract().path("token");
-
-        Response response = given()
-                .header("Content-type", "application/json")
-                .header("Authorization", "Bearer " + token)
-                .baseUri("http://localhost")
-                .port(8085)
-                .basePath("/api")
-                .queryParam("email", "testuser@test.nl")
                 .when()
-                .get("users/email")
-                .then().log().all().extract().response();
+                .post("/auth/signin")
+                .then()
+                .log().all()
+                .assertThat().statusCode(200)
+                .extract().response().body().path("token");
 
-
+        given().spec(requestSpecification)
+                .header("Authorization", "Bearer " + token)
+                .log().all() // log request
+                .when().get("/users")
+                .then().assertThat().statusCode(200)
+                .log().all();
     }
 
 }
