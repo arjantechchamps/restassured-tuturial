@@ -1,8 +1,6 @@
 package io.techchamps.restbackend.response;
 
 
-import io.techchamps.restbackend.request.AdressRequest;
-
 import java.util.List;
 import java.util.Set;
 
@@ -12,7 +10,6 @@ public class UserResponse {
     private String username;
     private String email;
     private Set<String> roles;
-    private List<AdressRequest> adresses;
 
 
     public int getId() {
@@ -55,11 +52,4 @@ public class UserResponse {
         this.roles = roles;
     }
 
-    public List<AdressRequest> getAdresses() {
-        return adresses;
-    }
-
-    public void setAdresses(List<AdressRequest> adresses) {
-        this.adresses = adresses;
-    }
 }

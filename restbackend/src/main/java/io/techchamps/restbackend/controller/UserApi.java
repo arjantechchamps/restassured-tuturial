@@ -1,14 +1,10 @@
 package io.techchamps.restbackend.controller;
 
-import io.techchamps.restbackend.entity.Adresses;
-import io.techchamps.restbackend.entity.Role;
-import io.techchamps.restbackend.entity.RoleName;
-import io.techchamps.restbackend.entity.User;
+import io.techchamps.restbackend.entity.*;
 import io.techchamps.restbackend.exception.NotFoundException;
 import io.techchamps.restbackend.exception.UnauthorizedException;
-import io.techchamps.restbackend.repository.AdressesRepository;
 import io.techchamps.restbackend.repository.RoleRepository;
-import io.techchamps.restbackend.request.AdressRequest;
+import io.techchamps.restbackend.request.ProfileRequest;
 import io.techchamps.restbackend.request.UserRequest;
 import io.techchamps.restbackend.response.ErrorResponse;
 import io.techchamps.restbackend.response.UserResponse;
@@ -41,8 +37,6 @@ public class UserApi {
     @Autowired
     PasswordEncoder encoder;
 
-    @Autowired
-    AdressesRepository adressesRepository;
 
     // Method to get all users
 
@@ -87,38 +81,59 @@ public class UserApi {
         }
     }
 
-    // Method to add a new user
     @PreAuthorize("hasRole('USER') or hasRole('ADMIN')")
     @PostMapping
     public ResponseEntity<Object> addUser(@RequestBody UserRequest userRequest) {
         try {
+
             // Assign roles to the user
             Set<Role> roles = Set.of(roleRepository.findByName(RoleName.USER).orElseThrow(() -> new NotFoundException("Role not found")));
-
-            // Map UserRequest to User entity
-            User user = modelMapper.map(userRequest, User.class);
+            User user = new User();
+            user.setName(userRequest.getName());
+            user.setUsername(userRequest.getUsername());
+            user.setEmail(userRequest.getEmail());
+            user.setPassword(userRequest.getPassword()); // Ensure to encode the password
             user.setRoles(roles);
 
-            // Encrypt password (using PasswordEncoder)
-            user.setPassword(encoder.encode(userRequest.getPassword()));
+            // Handle optional profile information
+            if (userRequest.getProfile() != null) {
+                ProfileRequest profileRequest = userRequest.getProfile();
 
-            for (AdressRequest adressRequest : userRequest.getAdresses()) {
-                Adresses adresses = modelMapper.map(adressRequest, Adresses.class);
-                adressesRepository.save(adresses);
+                // Add addresses
+                List<Address> addresses = profileRequest.getAddresses().stream().map(req -> {
+                    Address address = new Address();
+                    address.setStreet(req.getStreet());
+                    address.setHouseNumber(req.getHouseNumber());
+                    address.setZipcode(req.getZipcode());
+                    address.setCity(req.getCity());
+                    address.setCountry(req.getCountry());
+                    address.setUser(user);
+                    return address;
+                }).toList();
+                user.getAddresses().addAll(addresses);
+
+                // Add phone numbers
+                List<PhoneNumber> phoneNumbers = profileRequest.getPhoneNumbers().stream().map(req -> {
+                    PhoneNumber phoneNumber = new PhoneNumber();
+                    phoneNumber.setNumber(req.getNumber());
+                    phoneNumber.setType(req.getType());
+                    phoneNumber.setUser(user);
+                    return phoneNumber;
+                }).toList();
+                user.getPhoneNumbers().addAll(phoneNumbers);
+
+                // Add interests
+                if (profileRequest.getInterests() != null) {
+                    user.getInterests().addAll(profileRequest.getInterests());
+                }
             }
-            // Save user
+
             userService.save(user);
 
-            // Map saved user to UserResponse
-            UserResponse userResponse = modelMapper.map(user, UserResponse.class);
-
-            return ResponseEntity.status(HttpStatus.CREATED).body(userResponse);
-        } catch (NotFoundException e) {
-            ErrorResponse error = new ErrorResponse("Role not found", HttpStatus.NOT_FOUND.value(), "role_not_found");
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(error);
+            return ResponseEntity.status(HttpStatus.CREATED).body("User created successfully");
         } catch (Exception e) {
-            ErrorResponse error = new ErrorResponse("An error occurred while creating the user", HttpStatus.INTERNAL_SERVER_ERROR.value(), "server_error");
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(error);
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body(new ErrorResponse("Error creating user", 500, "server_error"));
         }
     }
 
@@ -137,6 +152,51 @@ public class UserApi {
         } catch (Exception e) {
             ErrorResponse error = new ErrorResponse("An error occurred while deleting the user", HttpStatus.INTERNAL_SERVER_ERROR.value(), "server_error");
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(error);
+        }
+    }
+
+    @PreAuthorize("hasRole('USER') or hasRole('ADMIN')")
+    @PostMapping("/{id}/profile")
+    public ResponseEntity<Object> updateUserProfile(@PathVariable int id, @RequestBody ProfileRequest profileRequest) {
+        try {
+            User user = userService.findById(id).orElseThrow(() -> new NotFoundException("User not found"));
+
+            // Update addresses
+            List<Address> addresses = profileRequest.getAddresses().stream().map(req -> {
+                Address address = new Address();
+                address.setStreet(req.getStreet());
+                address.setHouseNumber(req.getHouseNumber());
+                address.setZipcode(req.getZipcode());
+                address.setCity(req.getCity());
+                address.setCountry(req.getCountry());
+                address.setUser(user);
+                return address;
+            }).toList();
+            user.getAddresses().clear();
+            user.getAddresses().addAll(addresses);
+
+            // Update phone numbers
+            List<PhoneNumber> phoneNumbers = profileRequest.getPhoneNumbers().stream().map(req -> {
+                PhoneNumber phoneNumber = new PhoneNumber();
+                phoneNumber.setNumber(req.getNumber());
+                phoneNumber.setType(req.getType());
+                phoneNumber.setUser(user);
+                return phoneNumber;
+            }).toList();
+            user.getPhoneNumbers().clear();
+            user.getPhoneNumbers().addAll(phoneNumbers);
+
+            // Update interests
+            user.getInterests().clear();
+            user.getInterests().addAll(profileRequest.getInterests());
+
+            userService.save(user);
+
+            return ResponseEntity.ok("Profile updated successfully");
+        } catch (NotFoundException e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ErrorResponse("User not found", 404, "user_not_found"));
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new ErrorResponse("Error updating profile", 500, "server_error"));
         }
     }
 }

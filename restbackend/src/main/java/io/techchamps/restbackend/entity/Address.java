@@ -1,12 +1,42 @@
-package io.techchamps.restbackend.response;
+package io.techchamps.restbackend.entity;
 
-public class AddressResponse {
+import jakarta.persistence.*;
+import jakarta.validation.constraints.NotBlank;
 
+@Entity
+@Table(name = "addresses")
+public class Address {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private int id;
+
+    @NotBlank
     private String street;
+
+    @NotBlank
     private String houseNumber;
+
+    @NotBlank
     private String zipcode;
+
+    @NotBlank
     private String city;
+
+    @NotBlank
     private String country;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "user_id")
+    private User user;
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
 
     public String getStreet() {
         return street;
@@ -46,5 +76,13 @@ public class AddressResponse {
 
     public void setCountry(String country) {
         this.country = country;
+    }
+
+    public User getUser() {
+        return user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
     }
 }

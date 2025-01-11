@@ -1,7 +1,6 @@
-package io.techchamps.restbackend.response;
+package io.techchamps.restbackend.request;
 
-public class AddressResponse {
-
+public class AddressRequest {
     private String street;
     private String houseNumber;
     private String zipcode;

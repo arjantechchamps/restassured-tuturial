@@ -1,7 +1,8 @@
 package io.techchamps.restbackend.request;
 
 
-import java.util.List;
+import io.techchamps.restbackend.entity.Role;
+
 import java.util.Set;
 
 public class UserRequest {
@@ -10,8 +11,8 @@ public class UserRequest {
     private String username;
     private String email;
     public String password;
-    private Set<String> roles;
-    private List<AdressRequest> adresses;
+    private Set<RoleRequest> roles;
+    private ProfileRequest profile; // Optional profile details
 
     public String getName() {
         return name;
@@ -37,7 +38,7 @@ public class UserRequest {
         this.email = email;
     }
 
-    public Set<String> getRoles() {
+    public Set<RoleRequest> getRoles() {
         return roles;
     }
 
@@ -49,15 +50,15 @@ public class UserRequest {
         this.password = password;
     }
 
-    public void setRoles(Set<String> roles) {
+    public void setRoles(Set<RoleRequest> roles) {
         this.roles = roles;
     }
 
-    public List<AdressRequest> getAdresses() {
-        return adresses;
+    public ProfileRequest getProfile() {
+        return profile;
     }
 
-    public void setAdresses(List<AdressRequest> adresses) {
-        this.adresses = adresses;
+    public void setProfile(ProfileRequest profile) {
+        this.profile = profile;
     }
 }
