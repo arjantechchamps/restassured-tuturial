@@ -1,13 +1,14 @@
 package io.techchamps.restbackend.controller;
 
-import io.techchamps.restbackend.config.Constants;
-import io.techchamps.restbackend.entity.Address;
+import io.techchamps.restbackend.entity.Adresses;
 import io.techchamps.restbackend.entity.Role;
 import io.techchamps.restbackend.entity.RoleName;
 import io.techchamps.restbackend.entity.User;
 import io.techchamps.restbackend.exception.NotFoundException;
 import io.techchamps.restbackend.exception.UnauthorizedException;
+import io.techchamps.restbackend.repository.AdressesRepository;
 import io.techchamps.restbackend.repository.RoleRepository;
+import io.techchamps.restbackend.request.AdressRequest;
 import io.techchamps.restbackend.request.UserRequest;
 import io.techchamps.restbackend.response.ErrorResponse;
 import io.techchamps.restbackend.response.UserResponse;
@@ -39,6 +40,9 @@ public class UserApi {
 
     @Autowired
     PasswordEncoder encoder;
+
+    @Autowired
+    AdressesRepository adressesRepository;
 
     // Method to get all users
 
@@ -97,14 +101,11 @@ public class UserApi {
 
             // Encrypt password (using PasswordEncoder)
             user.setPassword(encoder.encode(userRequest.getPassword()));
-            // Map and set home and work addresses
-            Address homeAddress = modelMapper.map(userRequest.getHomeAddress(), Address.class);
-            Address workAddress = modelMapper.map(userRequest.getWorkAddress(), Address.class);
-            homeAddress.setId(0); // Explicitly set to null to ensure a new ID is generated
-            workAddress.setId(0);
-            user.setHomeAddress(homeAddress);
-            user.setWorkAddress(workAddress);
 
+            for (AdressRequest adressRequest : userRequest.getAdresses()) {
+                Adresses adresses = modelMapper.map(adressRequest, Adresses.class);
+                adressesRepository.save(adresses);
+            }
             // Save user
             userService.save(user);
 

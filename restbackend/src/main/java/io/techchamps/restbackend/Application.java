@@ -2,8 +2,6 @@ package io.techchamps.restbackend;
 
 import io.swagger.v3.oas.annotations.OpenAPIDefinition;
 import io.swagger.v3.oas.annotations.info.Info;
-import io.techchamps.restbackend.entity.Address;
-import io.techchamps.restbackend.request.AddressRequest;
 import org.modelmapper.ModelMapper;
 import org.modelmapper.convention.MatchingStrategies;
 import org.springframework.boot.SpringApplication;

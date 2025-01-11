@@ -1,6 +1,7 @@
 package io.techchamps.restbackend.request;
 
 
+import java.util.List;
 import java.util.Set;
 
 public class UserRequest {
@@ -10,8 +11,7 @@ public class UserRequest {
     private String email;
     public String password;
     private Set<String> roles;
-    private AddressRequest workAddress;
-    private AddressRequest homeAddress;
+    private List<AdressRequest> adresses;
 
     public String getName() {
         return name;
@@ -53,19 +53,11 @@ public class UserRequest {
         this.roles = roles;
     }
 
-    public AddressRequest getWorkAddress() {
-        return workAddress;
+    public List<AdressRequest> getAdresses() {
+        return adresses;
     }
 
-    public void setWorkAddress(AddressRequest workAddress) {
-        this.workAddress = workAddress;
-    }
-
-    public AddressRequest getHomeAddress() {
-        return homeAddress;
-    }
-
-    public void setHomeAddress(AddressRequest homeAddress) {
-        this.homeAddress = homeAddress;
+    public void setAdresses(List<AdressRequest> adresses) {
+        this.adresses = adresses;
     }
 }

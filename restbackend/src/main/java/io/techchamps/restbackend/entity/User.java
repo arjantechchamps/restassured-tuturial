@@ -6,7 +6,9 @@ import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
 import org.hibernate.annotations.NaturalId;
 
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 @Entity
@@ -41,13 +43,6 @@ public class User {
     @Size(min = 6, max = 100)
     private String password;
 
-    @OneToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "work_address_id", referencedColumnName = "id")
-    private Address workAddress;
-
-    @OneToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "home_address_id", referencedColumnName = "id")
-    private Address homeAddress;
 
     @ManyToMany(fetch = FetchType.LAZY, cascade = {
             CascadeType.PERSIST,
@@ -57,6 +52,12 @@ public class User {
             joinColumns = @JoinColumn(name = "user_id"),
             inverseJoinColumns = @JoinColumn(name = "role_id"))
     private Set<Role> roles = new HashSet<>();
+
+    @ManyToMany(fetch = FetchType.LAZY,cascade = {CascadeType.PERSIST,CascadeType.MERGE})
+    @JoinTable(name = "adresses",
+            joinColumns = @JoinColumn(name = "user_id"),
+            inverseJoinColumns = @JoinColumn(name = "adresses_id"))
+    private List<Adresses> adressesList = new ArrayList<>();
 
     public User(String name, String username, String email, String password) {
         this.name = name;
@@ -109,28 +110,20 @@ public class User {
         this.password = password;
     }
 
-    public Address getWorkAddress() {
-        return workAddress;
-    }
-
-    public void setWorkAddress(Address workAddress) {
-        this.workAddress = workAddress;
-    }
-
-    public Address getHomeAddress() {
-        return homeAddress;
-    }
-
-    public void setHomeAddress(Address homeAddress) {
-        this.homeAddress = homeAddress;
-    }
-
     public Set<Role> getRoles() {
         return roles;
     }
 
     public void setRoles(Set<Role> roles) {
         this.roles = roles;
+    }
+
+    public List<Adresses> getAdressesList() {
+        return adressesList;
+    }
+
+    public void setAdressesList(List<Adresses> adressesList) {
+        this.adressesList = adressesList;
     }
 
     // Equals and HashCode
