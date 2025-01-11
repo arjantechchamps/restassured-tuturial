@@ -22,28 +22,34 @@ public class CreateUserTest {
                               "email": "John@test.nl",
                               "password": "test1234",
                               "roles": [
-                                "USER"
-                              ],
-                              "workAddress": {
-                              "street": "Teststreet",
-                                "city": "Enschede",
-                                "state": "Overijssel",
-                                "zipcode": "1234AA",
-                                "country": "The Netherlands",
-                                "type": "WORK"
-                              },
-                              "homeAddress": {
-                                "street": "HomeStreet",
-                                "city": "Enschede",
-                                "state": "Overijssel",
-                                "zipcode": "1234AA",
-                                "country": "The Netherlands",
-                                "type": "HOME"
-                              }
-                            }""")
+                             {
+                               "name": "USER"
+                             }
+                           ],
+                           "profile": {
+                             "addresses": [
+                               {
+                                 "street": "string",
+                                 "houseNumber": "string",
+                                 "zipcode": "string",
+                                 "city": "string",
+                                 "country": "string"
+                               }
+                             ],
+                             "phoneNumbers": [
+                               {
+                                 "number": "string",
+                                 "type": "PRIVATE"
+                               }
+                             ],
+                             "interests": [
+                               "SPORTS"
+                             ]
+                           }
+                         }""")
                 .log().all() // log request
                 .when().post("/users")
-                .then().assertThat().statusCode(200)
+                .then().assertThat().statusCode(201)
                 .log().all();
     }
 }

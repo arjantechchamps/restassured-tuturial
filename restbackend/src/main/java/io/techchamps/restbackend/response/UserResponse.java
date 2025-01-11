@@ -1,7 +1,8 @@
 package io.techchamps.restbackend.response;
 
 
-import java.util.List;
+import io.techchamps.restbackend.request.ProfileRequest;
+
 import java.util.Set;
 
 public class UserResponse {
@@ -10,7 +11,7 @@ public class UserResponse {
     private String username;
     private String email;
     private Set<String> roles;
-
+    private ProfileRequest profile; // Optional profile details
 
     public int getId() {
         return id;
@@ -52,4 +53,11 @@ public class UserResponse {
         this.roles = roles;
     }
 
+    public ProfileRequest getProfile() {
+        return profile;
+    }
+
+    public void setProfile(ProfileRequest profile) {
+        this.profile = profile;
+    }
 }
