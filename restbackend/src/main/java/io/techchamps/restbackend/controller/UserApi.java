@@ -154,49 +154,4 @@ public class UserApi {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(error);
         }
     }
-
-    @PreAuthorize("hasRole('USER') or hasRole('ADMIN')")
-    @PostMapping("/{id}/profile")
-    public ResponseEntity<Object> updateUserProfile(@PathVariable int id, @RequestBody ProfileRequest profileRequest) {
-        try {
-            User user = userService.findById(id).orElseThrow(() -> new NotFoundException("User not found"));
-
-            // Update addresses
-            List<Address> addresses = profileRequest.getAddresses().stream().map(req -> {
-                Address address = new Address();
-                address.setStreet(req.getStreet());
-                address.setHouseNumber(req.getHouseNumber());
-                address.setZipcode(req.getZipcode());
-                address.setCity(req.getCity());
-                address.setCountry(req.getCountry());
-                address.setUser(user);
-                return address;
-            }).toList();
-            user.getAddresses().clear();
-            user.getAddresses().addAll(addresses);
-
-            // Update phone numbers
-            List<PhoneNumber> phoneNumbers = profileRequest.getPhoneNumbers().stream().map(req -> {
-                PhoneNumber phoneNumber = new PhoneNumber();
-                phoneNumber.setNumber(req.getNumber());
-                phoneNumber.setType(req.getType());
-                phoneNumber.setUser(user);
-                return phoneNumber;
-            }).toList();
-            user.getPhoneNumbers().clear();
-            user.getPhoneNumbers().addAll(phoneNumbers);
-
-            // Update interests
-            user.getInterests().clear();
-            user.getInterests().addAll(profileRequest.getInterests());
-
-            userService.save(user);
-
-            return ResponseEntity.ok("Profile updated successfully");
-        } catch (NotFoundException e) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ErrorResponse("User not found", 404, "user_not_found"));
-        } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new ErrorResponse("Error updating profile", 500, "server_error"));
-        }
-    }
 }

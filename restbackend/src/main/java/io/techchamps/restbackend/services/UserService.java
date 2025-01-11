@@ -1,8 +1,10 @@
 package io.techchamps.restbackend.services;
 
 import io.techchamps.restbackend.entity.User;
+import io.techchamps.restbackend.exception.NotFoundException;
 import io.techchamps.restbackend.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -16,6 +18,15 @@ public class UserService implements IUser {
     @Autowired
     public UserService(UserRepository userRepository) {
         this.userRepository = userRepository;
+    }
+
+    public User getCurrentUser() {
+        // Get the current authenticated user's username
+        String username = SecurityContextHolder.getContext().getAuthentication().getName();
+
+        // Find and return the user based on the username
+        return userRepository.findByUsername(username)
+                .orElseThrow(() -> new NotFoundException("User not found"));
     }
 
     @Override
