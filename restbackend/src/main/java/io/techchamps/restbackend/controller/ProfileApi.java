@@ -1,9 +1,14 @@
 package io.techchamps.restbackend.controller;
 
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.techchamps.restbackend.entity.User;
 import io.techchamps.restbackend.exception.NotFoundException;
 import io.techchamps.restbackend.request.ProfileRequest;
 import io.techchamps.restbackend.response.ErrorResponse;
+import io.techchamps.restbackend.response.JwtResponse;
 import io.techchamps.restbackend.response.ProfileResponse;
 import io.techchamps.restbackend.services.ProfileService;
 import io.techchamps.restbackend.services.UserService;
@@ -27,6 +32,10 @@ public class ProfileApi {
 
     @PreAuthorize("hasRole('USER') or hasRole('ADMIN')")
     @GetMapping
+    @ApiResponses({
+            @ApiResponse(responseCode = "200", description = "Successful request", content = @Content(mediaType = "application/json", schema = @Schema(implementation = ProfileResponse.class))),
+            @ApiResponse(responseCode = "500", description = "Internal server error", content = @Content(mediaType = "application/json", schema = @Schema(implementation = ErrorResponse.class)))
+    })
     public ResponseEntity<ProfileResponse> getCurrentUserProfile(Authentication authentication) {
         String username = authentication.getName();
         User user = userService.findByUsername(username)

@@ -15,6 +15,7 @@ import io.techchamps.restbackend.request.LoginRequest;
 import io.techchamps.restbackend.request.SignUpRequest;
 import io.techchamps.restbackend.response.ErrorResponse;
 import io.techchamps.restbackend.response.JwtResponse;
+import io.techchamps.restbackend.response.UserResponse;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
@@ -94,6 +95,10 @@ public class AuthAPI {
     }
 
     @PostMapping("/signup")
+    @ApiResponses({
+            @ApiResponse(responseCode = "200", description = "Successful authentication", content = @Content(mediaType = "application/json", schema = @Schema(implementation = SignUpRequest.class))),
+            @ApiResponse(responseCode = "404", description = "Invalid request", content = @Content(mediaType = "application/json", schema = @Schema(implementation = ErrorResponse.class))),
+    })
     public ResponseEntity<?> registerUser(@Valid @RequestBody SignUpRequest signUpRequest) {
 
         if (Boolean.TRUE.equals(userRepository.existsByUsername(signUpRequest.getUsername()))) {

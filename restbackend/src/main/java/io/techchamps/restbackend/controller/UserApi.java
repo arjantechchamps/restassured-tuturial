@@ -1,5 +1,9 @@
 package io.techchamps.restbackend.controller;
 
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.techchamps.restbackend.entity.*;
 import io.techchamps.restbackend.exception.NotFoundException;
 import io.techchamps.restbackend.exception.UnauthorizedException;
@@ -8,6 +12,7 @@ import io.techchamps.restbackend.request.AddressRequest;
 import io.techchamps.restbackend.request.ProfileRequest;
 import io.techchamps.restbackend.request.UserRequest;
 import io.techchamps.restbackend.response.ErrorResponse;
+import io.techchamps.restbackend.response.JwtResponse;
 import io.techchamps.restbackend.response.UserResponse;
 import io.techchamps.restbackend.services.UserService;
 import jakarta.validation.Valid;
@@ -86,6 +91,11 @@ public class UserApi {
 
     @PreAuthorize("hasRole('USER') or hasRole('ADMIN')")
     @PostMapping
+    @ApiResponses({
+            @ApiResponse(responseCode = "200", description = "Successful authentication", content = @Content(mediaType = "application/json", schema = @Schema(implementation = UserResponse.class))),
+            @ApiResponse(responseCode = "401", description = "Invalid credentials", content = @Content(mediaType = "application/json", schema = @Schema(implementation = ErrorResponse.class))),
+            @ApiResponse(responseCode = "500", description = "Internal server error", content = @Content(mediaType = "application/json", schema = @Schema(implementation = ErrorResponse.class)))
+    })
     public ResponseEntity<Object> addUser(@RequestBody @Valid UserRequest userRequest) {
         try {
             // Assign roles to the user

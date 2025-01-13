@@ -60,6 +60,8 @@ public class CreateUserTest {
 
     @Test
     public void AddUserAndDelete() {
+
+        // Request chaining.
         String token = getAdminToken(createBasicRequestSpecification());
         int userid = given()
                 .spec(createAuthRequestSpecification(token))
