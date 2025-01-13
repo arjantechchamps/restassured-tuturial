@@ -5,7 +5,6 @@ import io.techchamps.restbackend.exception.NotFoundException;
 import io.techchamps.restbackend.exception.UnauthorizedException;
 import io.techchamps.restbackend.repository.RoleRepository;
 import io.techchamps.restbackend.request.AddressRequest;
-import io.techchamps.restbackend.request.PhoneNumberRequest;
 import io.techchamps.restbackend.request.ProfileRequest;
 import io.techchamps.restbackend.request.UserRequest;
 import io.techchamps.restbackend.response.ErrorResponse;
@@ -119,18 +118,6 @@ public class UserApi {
                     user.getAddresses().addAll(addresses);
                 }
 
-                // Add phone numbers
-                if (profileRequest.getPhoneNumbers() != null) {
-                    List<PhoneNumber> phoneNumbers = profileRequest.getPhoneNumbers().stream().map(req -> {
-                        PhoneNumber phoneNumber = new PhoneNumber();
-                        phoneNumber.setNumber(req.getNumber());
-                        phoneNumber.setType(req.getType());
-                        phoneNumber.setUser(user);
-                        return phoneNumber;
-                    }).toList();
-                    user.getPhoneNumbers().addAll(phoneNumbers);
-                }
-
                 // Add interests
                 if (profileRequest.getInterests() != null) {
                     user.getInterests().addAll(profileRequest.getInterests());
@@ -165,7 +152,7 @@ public class UserApi {
                 .collect(Collectors.toSet()));
 
         // Map profile details if available
-        if (!user.getAddresses().isEmpty() || !user.getPhoneNumbers().isEmpty() || !user.getInterests().isEmpty()) {
+        if (!user.getAddresses().isEmpty() || !user.getInterests().isEmpty()) {
             ProfileRequest profileRequest = new ProfileRequest();
 
             // Map addresses
@@ -177,14 +164,6 @@ public class UserApi {
                 addressRequest.setCity(address.getCity());
                 addressRequest.setCountry(address.getCountry());
                 return addressRequest;
-            }).toList());
-
-            // Map phone numbers
-            profileRequest.setPhoneNumbers(user.getPhoneNumbers().stream().map(phoneNumber -> {
-                PhoneNumberRequest phoneNumberRequest = new PhoneNumberRequest();
-                phoneNumberRequest.setNumber(phoneNumber.getNumber());
-                phoneNumberRequest.setType(phoneNumber.getType());
-                return phoneNumberRequest;
             }).toList());
 
             // Map interests

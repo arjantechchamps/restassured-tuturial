@@ -7,7 +7,6 @@ import java.util.List;
 public class ProfileResponse {
 
     private List<AddressResponse> addresses;
-    private List<PhoneNumberResponse> phoneNumbers;
     private List<Interest> interests;
 
     public List<AddressResponse> getAddresses() {
@@ -16,14 +15,6 @@ public class ProfileResponse {
 
     public void setAddresses(List<AddressResponse> addresses) {
         this.addresses = addresses;
-    }
-
-    public List<PhoneNumberResponse> getPhoneNumbers() {
-        return phoneNumbers;
-    }
-
-    public void setPhoneNumbers(List<PhoneNumberResponse> phoneNumbers) {
-        this.phoneNumbers = phoneNumbers;
     }
 
     public List<Interest> getInterests() {

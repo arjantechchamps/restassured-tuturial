@@ -11,7 +11,7 @@ public class BasicLoginTest3 {
 
     @Test
     public void loginWithValidCredentials() {
-        given().spec(createBasicRequestSpecification())
+        given().spec(Helper.createBasicRequestSpecification())
                 .log().all() // log request
                 .body("""
                         {

@@ -8,16 +8,16 @@ import static io.restassured.RestAssured.given;
 public class GetAllUsersTest {
 
 
-    @Test
-    //This doesn't work because we need to authenticate first so how do we do that?
-    public void getAllUsers() {
-        given().spec(Helper.createBasicRequestSpecification())
-                .log().all() // log request
-                .when().get("/users")
-                .then()
-                .log().all()
-                .assertThat().statusCode(200);
-    }
+//    @Test
+//    //This doesn't work because we need to authenticate first so how do we do that?
+//    public void getAllUsers() {
+//        given().spec(Helper.createBasicRequestSpecification())
+//                .log().all() // log request
+//                .when().get("/users")
+//                .then()
+//                .log().all()
+//                .assertThat().statusCode(200);
+//    }
 
     @Test
     public void getAllUsersWithAuthentication() {

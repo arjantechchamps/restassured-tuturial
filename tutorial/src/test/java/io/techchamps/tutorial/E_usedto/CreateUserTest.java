@@ -4,6 +4,8 @@ import org.junit.jupiter.api.Test;
 
 import static io.restassured.RestAssured.given;
 import static io.techchamps.tutorial.D_authentication.HelperWithAuth.*;
+import static org.hamcrest.Matchers.*;
+
 
 
 public class CreateUserTest {
@@ -48,7 +50,9 @@ public class CreateUserTest {
                         }""")
                 .log().all() // log request
                 .when().post("/users")
-                .then().assertThat().statusCode(201)
+                .then()
+                .assertThat().statusCode(201)
+                .assertThat().body("id",is(notNullValue()))
                 .log().all();
 
         // problem is that this test will only work once
@@ -119,6 +123,6 @@ public class CreateUserTest {
                 .log().all()
                 .statusCode(200);
 
-        // This is not really readable and maintainable so lets use DTO's
+        // This is not really readable and maintainable so lets use DTO's instead
     }
 }

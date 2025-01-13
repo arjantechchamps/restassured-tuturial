@@ -1,11 +1,9 @@
 package io.techchamps.restbackend.services;
 
 import io.techchamps.restbackend.entity.Address;
-import io.techchamps.restbackend.entity.PhoneNumber;
 import io.techchamps.restbackend.entity.User;
 import io.techchamps.restbackend.request.ProfileRequest;
 import io.techchamps.restbackend.response.AddressResponse;
-import io.techchamps.restbackend.response.PhoneNumberResponse;
 import io.techchamps.restbackend.response.ProfileResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -32,15 +30,6 @@ public class ProfileService {
         }).toList();
         profileResponse.setAddresses(addressResponses);
 
-        // Map PhoneNumber entities to PhoneNumberResponse DTOs
-        List<PhoneNumberResponse> phoneNumberResponses = user.getPhoneNumbers().stream().map(phoneNumber -> {
-            PhoneNumberResponse response = new PhoneNumberResponse();
-            response.setNumber(phoneNumber.getNumber());
-            response.setType(phoneNumber.getType());
-            return response;
-        }).toList();
-        profileResponse.setPhoneNumbers(phoneNumberResponses);
-
         // Add interests directly (assuming interests are stored as strings)
         profileResponse.setInterests(user.getInterests());
 
@@ -64,18 +53,6 @@ public class ProfileService {
             user.getAddresses().addAll(addresses);
         }
 
-        // Update phone numbers
-        if (profileRequest.getPhoneNumbers() != null) {
-            user.getPhoneNumbers().clear();
-            List<PhoneNumber> phoneNumbers = profileRequest.getPhoneNumbers().stream().map(req -> {
-                PhoneNumber phoneNumber = new PhoneNumber();
-                phoneNumber.setNumber(req.getNumber());
-                phoneNumber.setType(req.getType());
-                phoneNumber.setUser(user);
-                return phoneNumber;
-            }).toList();
-            user.getPhoneNumbers().addAll(phoneNumbers);
-        }
 
         // Update interests
         if (profileRequest.getInterests() != null) {
@@ -90,7 +67,6 @@ public class ProfileService {
     public void deleteProfile(User user) {
         // Remove associated addresses and phone numbers
         user.getAddresses().clear();
-        user.getPhoneNumbers().clear();
         user.getInterests().clear();
 
         userService.save(user);
