@@ -59,7 +59,7 @@ public class ProfileApi {
 
 
     @PreAuthorize("hasRole('ADMIN')")
-    @DeleteMapping("/{userId}")
+    @DeleteMapping("/{id}")
     public ResponseEntity<Object> deleteProfile(@PathVariable int id) {
         try {
             // Find the user by the given ID

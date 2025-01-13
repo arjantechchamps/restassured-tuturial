@@ -1,12 +1,12 @@
 package io.techchamps.tutorial.E_DTO;
 
+
 import dto.JwtResponse;
 import dto.LoginRequest;
 import io.restassured.builder.RequestSpecBuilder;
 import io.restassured.specification.RequestSpecification;
 
 import static io.restassured.RestAssured.given;
-import static io.restassured.RestAssured.oauth;
 
 public class HelperWithDTO {
 

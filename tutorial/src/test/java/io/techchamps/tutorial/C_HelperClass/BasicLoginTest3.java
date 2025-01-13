@@ -4,14 +4,14 @@ import io.techchamps.tutorial.C_helperclass.Helper;
 import org.junit.jupiter.api.Test;
 
 import static io.restassured.RestAssured.given;
-import static org.hamcrest.Matchers.equalTo;
-import static org.hamcrest.Matchers.notNullValue;
+import static io.techchamps.tutorial.C_helperclass.Helper.createBasicRequestSpecification;
+import static org.hamcrest.Matchers.*;
 
 public class BasicLoginTest3 {
 
     @Test
     public void loginWithValidCredentials() {
-        given().spec(Helper.createBasicRequestSpecification())
+        given().spec(createBasicRequestSpecification())
                 .log().all() // log request
                 .body("""
                         {
@@ -24,13 +24,14 @@ public class BasicLoginTest3 {
                 .log().all()
                 .assertThat().statusCode(200)
                 .body("token", notNullValue())
-                .body("type", equalTo("Bearer"));
+                .body("type", equalTo("Bearer"))
+                .body("roles",hasItems("ROLE_USER","ROLE_ADMIN"));;
 
     }
 
     @Test
     public void loginWithInValidCredentials() {
-        given().spec(Helper.createBasicRequestSpecification())
+        given().spec(createBasicRequestSpecification())
                 .log().all() // log request
                 .body("""
                         {
