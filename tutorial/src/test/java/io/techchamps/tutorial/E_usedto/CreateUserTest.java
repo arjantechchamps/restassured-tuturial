@@ -37,12 +37,6 @@ public class CreateUserTest {
                                "country": "Netherlands"
                              }
                            ],
-                           "phoneNumbers": [
-                             {
-                               "number": "+31 6 12345678",
-                               "type": "PRIVATE"
-                             }
-                           ],
                            "interests": [
                              "SPORTS"
                            ]
@@ -91,16 +85,6 @@ public class CreateUserTest {
                                "zipcode": "1015CJ",
                                "city": "Amsterdam",
                                "country": "Netherlands"
-                             }
-                           ],
-                           "phoneNumbers": [
-                             {
-                               "number": "+31 6 12345678",
-                               "type": "PRIVATE"
-                             },
-                                                          {
-                               "number": "+31 6 12345679",
-                               "type": "BUSINESS"
                              }
                            ],
                            "interests": [

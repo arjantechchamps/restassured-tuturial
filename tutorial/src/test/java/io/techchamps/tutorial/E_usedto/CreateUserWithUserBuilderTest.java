@@ -1,24 +1,26 @@
 package io.techchamps.tutorial.E_usedto;
 
+import Builders.UserRequestBuilder;
+import generated.dtos.UserRequest;
 import org.junit.jupiter.api.Test;
-import tutorial.dtos.UserRequest;
-
 
 import static io.restassured.RestAssured.given;
 import static io.techchamps.tutorial.D_authentication.HelperWithAuth.*;
 import static io.techchamps.tutorial.D_authentication.HelperWithAuth.createAuthRequestSpecification;
 
-public class CreateUserTestwithDTO {
-
+public class CreateUserWithUserBuilderTest {
 
     @Test
     public void AddUserAndDelete() {
 
+        UserRequest userRequest = new UserRequestBuilder()
+                .withUsername("SomeOne")
+                .build();
 
         String token = getAdminToken(createBasicRequestSpecification());
         int userid = given()
                 .spec(createAuthRequestSpecification(token))
-                .body(createUserRequest())
+                .body(userRequest)
                 .log().all() // log request
                 .when().post("/users")
                 .then().assertThat().statusCode(201)
@@ -34,15 +36,5 @@ public class CreateUserTestwithDTO {
                 .then()
                 .log().all()
                 .statusCode(200);
-
-        // This is not really readable and maintainable so lets use DTO's
-
-
-    }
-    public UserRequest creatUserRequest(){
-
-        UserRequest userRequest = new UserRequest();
-
-        return  userRequest;
     }
 }
