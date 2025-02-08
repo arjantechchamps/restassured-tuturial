@@ -17,9 +17,8 @@ public class CreateUserWithUserBuilderTest {
                 .withUsername("SomeOne")
                 .build();
 
-        String token = getAdminToken(createBasicRequestSpecification());
         int userid = given()
-                .spec(createAuthRequestSpecification(token))
+                .spec(createAuthRequestSpecification(getAdminToken()))
                 .body(userRequest)
                 .log().all() // log request
                 .when().post("/users")
@@ -28,7 +27,7 @@ public class CreateUserWithUserBuilderTest {
                 .extract().response().path("id");
 
         given()
-                .spec(createAuthRequestSpecification(token))
+                .spec(createAuthRequestSpecification(getAdminToken()))
                 .log().all()
                 .when()
                 .pathParam("id", userid)

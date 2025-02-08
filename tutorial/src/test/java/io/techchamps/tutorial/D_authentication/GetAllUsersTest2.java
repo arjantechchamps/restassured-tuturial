@@ -12,10 +12,9 @@ public class GetAllUsersTest2 {
     @Test
     public void getAllUsersWithAuthentication() {
 
-        String token = getAdminToken(createBasicRequestSpecification());
 
         given()
-                .spec(createAuthRequestSpecification(token))
+                .spec(createAuthRequestSpecification(getAdminToken()))
                 .log().all() // log request
                 .when().get("/users")
                 .then().assertThat().statusCode(200)

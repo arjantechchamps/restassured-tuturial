@@ -10,37 +10,23 @@ public class UserRequestBuilder {
     private final UserRequest userRequest;
     private final ProfileRequest profileRequest;
     private final RoleRequest roleRequest;
-    private final AddressRequest addressRequest;
 
     public UserRequestBuilder() {
         // Initialize the objects with default values.
         userRequest = new UserRequest();
         profileRequest = new ProfileRequest();
         roleRequest = new RoleRequest();
-        addressRequest = new AddressRequest();
 
         // Set default role
         roleRequest.setName("USER");
 
-        // Set default address
-        addressRequest.setCity("Enschede");
-        addressRequest.setCountry("Netherlands");
-        addressRequest.setStreet("TestStreet");
-        addressRequest.setHouseNumber("5");
-        addressRequest.setZipcode("1111AA");
-
-        // Set default profile: add interests and address
-        profileRequest.addInterestsItem(ProfileRequest.InterestsEnum.SPORTS);
-        profileRequest.addInterestsItem(ProfileRequest.InterestsEnum.TRAVEL);
-        profileRequest.addAddressesItem(addressRequest);
-
         // Set default user information
-        userRequest.setName("Joe");
-        userRequest.setUsername("Joe");
-        userRequest.setEmail("Joe@test.nl");
+        userRequest.setName("John");
+        userRequest.setUsername("John");
+        userRequest.setEmail("John@test.nl");
         userRequest.setPassword("test1234");
         userRequest.addRolesItem(roleRequest);
-        userRequest.setProfile(profileRequest);
+        userRequest.setProfile(new ProfileRequestBuilder(). build());
     }
 
     // With method to override name.
