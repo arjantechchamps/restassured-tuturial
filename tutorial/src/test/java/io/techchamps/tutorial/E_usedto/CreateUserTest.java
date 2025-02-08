@@ -13,9 +13,8 @@ public class CreateUserTest {
     @Test
     public void addUser() {
 
-        String token = getAdminToken(createBasicRequestSpecification());
         given()
-                .spec(createAuthRequestSpecification(token))
+                .spec(createAuthRequestSpecification(getAdminToken()))
                 .body("""
                            {
                              "name": "John",
@@ -56,9 +55,9 @@ public class CreateUserTest {
     public void AddUserAndDelete() {
 
         // Request chaining.
-        String token = getAdminToken(createBasicRequestSpecification());
+
         int userid = given()
-                .spec(createAuthRequestSpecification(token))
+                .spec(createAuthRequestSpecification(getAdminToken()))
                 .body("""
                            {
                              "name": "Joe",
@@ -100,7 +99,7 @@ public class CreateUserTest {
                 .extract().response().path("id");
 
         given()
-                .spec(createAuthRequestSpecification(token))
+                .spec(createAuthRequestSpecification(getAdminToken()))
                 .log().all()
                 .when()
                 .pathParam("id", userid)

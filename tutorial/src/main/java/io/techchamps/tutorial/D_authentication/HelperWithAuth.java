@@ -16,8 +16,8 @@ public class HelperWithAuth {
                 .build();
     }
 
-    public static String getToken(RequestSpecification requestSpecification,String username, String password) {
-        return given().spec(requestSpecification)
+    public static String getToken(String username, String password) {
+        return given().spec(createBasicRequestSpecification())
                 .body(String.format("""
                         {
                           "username": "%s",
@@ -35,13 +35,12 @@ public class HelperWithAuth {
                 .header("Authorization", "Bearer " + token);
     }
 
-    public static String getAdminToken(RequestSpecification requestSpecification) {
-        return getToken(requestSpecification,"admin","admin1234");
+    public static String getAdminToken() {
+        return getToken("admin","admin1234");
     }
 
-    public static String getUserToken(RequestSpecification requestSpecification) {
-        return getToken(requestSpecification,"user","user1234");
+    public static String getUserToken() {
+        return getToken("user","user1234");
     }
-
 
 }
