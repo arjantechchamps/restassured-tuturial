@@ -32,7 +32,7 @@ public class HelperWithAuth {
 
     public static RequestSpecification createAuthRequestSpecification(String token) {
         return given().spec(createBasicRequestSpecification())
-                .header("Authorization", "Bearer " + token);
+                .auth().oauth2(token);
     }
 
     public static String getAdminToken() {
