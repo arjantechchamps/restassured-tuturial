@@ -12,7 +12,6 @@ import io.techchamps.restbackend.request.AddressRequest;
 import io.techchamps.restbackend.request.ProfileRequest;
 import io.techchamps.restbackend.request.UserRequest;
 import io.techchamps.restbackend.response.ErrorResponse;
-import io.techchamps.restbackend.response.JwtResponse;
 import io.techchamps.restbackend.response.UserResponse;
 import io.techchamps.restbackend.services.UserService;
 import jakarta.validation.Valid;
@@ -48,7 +47,7 @@ public class UserApi {
 
     // Method to get all users
 
-    @PreAuthorize("hasRole('USER') or hasRole('ADMIN')")
+    @PreAuthorize("hasRole('ADMIN')")
     @GetMapping
     public ResponseEntity<Object> getAllUsers() {
         try {
@@ -60,7 +59,7 @@ public class UserApi {
             // Success response
         } catch (UnauthorizedException e) {
             ErrorResponse error = new ErrorResponse("Access Denied", HttpStatus.UNAUTHORIZED.value(), "access_denied");
-            return ResponseEntity.status(HttpStatus.FORBIDDEN).body(error);
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(error);
         }
         catch (Exception e) {
             // Handle other errors
