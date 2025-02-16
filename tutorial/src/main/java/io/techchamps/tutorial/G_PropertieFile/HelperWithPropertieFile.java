@@ -1,4 +1,4 @@
-package io.techchamps.tutorial.F_PropertieFile;
+package io.techchamps.tutorial.G_PropertieFile;
 
 import config.ConfigProperties;
 import dto.JwtResponse;

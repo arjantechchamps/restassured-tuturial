@@ -1,9 +1,8 @@
-package io.techchamps.tutorial.E_usedto;
+package io.techchamps.tutorial.F_usedto;
 
 import Builders.AdressRequestBuilder;
 import Builders.ProfileRequestBuilder;
 import Builders.UserRequestBuilder;
-import generated.dtos.AddressRequest;
 import generated.dtos.ProfileRequest;
 import generated.dtos.UserRequest;
 import generated.dtos.UserResponse;

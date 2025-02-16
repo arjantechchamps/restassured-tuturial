@@ -1,4 +1,4 @@
-package io.techchamps.tutorial.E_usedto;
+package io.techchamps.tutorial.F_usedto;
 
 import org.junit.jupiter.api.Test;
 

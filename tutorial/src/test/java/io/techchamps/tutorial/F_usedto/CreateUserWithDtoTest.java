@@ -1,7 +1,6 @@
-package io.techchamps.tutorial.E_usedto;
+package io.techchamps.tutorial.F_usedto;
 
 import generated.dtos.*;
-import org.checkerframework.checker.units.qual.A;
 import org.junit.jupiter.api.Test;
 
 import static io.restassured.RestAssured.given;
