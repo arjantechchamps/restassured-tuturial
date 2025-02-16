@@ -150,6 +150,23 @@ public class UserApi {
         }
     }
 
+    @PreAuthorize("hasRole('USER') or hasRole('ADMIN')")
+    @GetMapping("/username/{username}")
+    public ResponseEntity<Object> getUserByUsername(@PathVariable String username) {
+        try {
+            User user = userService.findByUsername(username)
+                    .orElseThrow(() -> new NotFoundException("User with username " + username + " not found!"));
+            UserResponse userResponse = modelMapper.map(user, UserResponse.class);
+            return ResponseEntity.ok(userResponse);
+        } catch (NotFoundException e) {
+            ErrorResponse error = new ErrorResponse("User not found", HttpStatus.NOT_FOUND.value(), "user_not_found");
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(error);
+        } catch (Exception e) {
+            ErrorResponse error = new ErrorResponse("An unexpected error occurred", HttpStatus.INTERNAL_SERVER_ERROR.value(), "server_error");
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(error);
+        }
+    }
+
     private UserResponse mapToUserResponse(User user) {
         UserResponse userResponse = new UserResponse();
         userResponse.setId(user.getId());
