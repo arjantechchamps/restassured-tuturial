@@ -1,4 +1,4 @@
-package io.techchamps.tutorial.A_howyoustart;
+package io.techchamps.tutorial;
 
 
 import org.junit.jupiter.api.Test;

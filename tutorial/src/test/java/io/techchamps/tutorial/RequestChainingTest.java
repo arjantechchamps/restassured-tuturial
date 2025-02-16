@@ -1,4 +1,4 @@
-package io.techchamps.tutorial.A_howyoustart;
+package io.techchamps.tutorial;
 
 
 public class RequestChainingTest {
