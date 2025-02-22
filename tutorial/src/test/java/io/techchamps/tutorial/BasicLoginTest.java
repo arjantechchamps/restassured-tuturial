@@ -12,10 +12,10 @@ public class BasicLoginTest {
 
         given()
                 .log().all() // log request
-                .header("Content-type", "application/json")
                 .baseUri("http://localhost")
                 .port(8085)
                 .basePath("/api")
+                .header("Content-type", "application/json")
                 .body("""
                         {
                           "username": "admin",
@@ -37,10 +37,10 @@ public class BasicLoginTest {
 
         given()
                 .log().all() // log request
-                .header("Content-type", "application/json")
                 .baseUri("http://localhost")
                 .port(8085)
                 .basePath("/api")
+                .header("Content-type", "application/json")
                 .body("""
                         {
                           "username": "dontExist",
