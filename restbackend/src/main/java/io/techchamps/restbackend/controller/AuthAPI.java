@@ -15,7 +15,7 @@ import io.techchamps.restbackend.request.LoginRequest;
 import io.techchamps.restbackend.request.SignUpRequest;
 import io.techchamps.restbackend.response.ErrorResponse;
 import io.techchamps.restbackend.response.JwtResponse;
-import io.techchamps.restbackend.response.UserResponse;
+import io.techchamps.restbackend.response.SignupResponse;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
@@ -96,10 +96,10 @@ public class AuthAPI {
 
     @PostMapping("/signup")
     @ApiResponses({
-            @ApiResponse(responseCode = "200", description = "Successful authentication", content = @Content(mediaType = "application/json", schema = @Schema(implementation = SignUpRequest.class))),
+            @ApiResponse(responseCode = "200", description = "Successful authentication", content = @Content(mediaType = "application/json", schema = @Schema(implementation = SignupResponse.class))),
             @ApiResponse(responseCode = "404", description = "Invalid request", content = @Content(mediaType = "application/json", schema = @Schema(implementation = ErrorResponse.class))),
     })
-    public ResponseEntity<?> registerUser(@Valid @RequestBody SignUpRequest signUpRequest) {
+    public ResponseEntity<Object> registerUser(@Valid @RequestBody SignUpRequest signUpRequest) {
 
         if (Boolean.TRUE.equals(userRepository.existsByUsername(signUpRequest.getUsername()))) {
             ErrorResponse error = new ErrorResponse("Username is already taken", HttpStatus.NOT_FOUND.value(), ERROR_MESSAGE);
@@ -129,7 +129,7 @@ public class AuthAPI {
                             .toList();
                     ErrorResponse error = new ErrorResponse("Invalid role provided", HttpStatus.NOT_FOUND.value(), ERROR_MESSAGE);
                     return ResponseEntity.badRequest().body(Map.of(
-                            "error", error,
+                            ERROR_MESSAGE, error,
                             "availableRoles", availableRoles
                     ));
                 }
@@ -141,13 +141,11 @@ public class AuthAPI {
         }
 
         user.setRoles(roles);
-
         userRepository.save(user);
 
-        return ResponseEntity.ok(Map.of(
-                "username", user.getUsername(),
-                "password", signUpRequest.getPassword()
-        ));
+        // Return a SignupResponse object instead of a Map
+        SignupResponse response = new SignupResponse(user.getUsername(), signUpRequest.getPassword());
+        return ResponseEntity.ok(response);
     }
 
     @GetMapping("/logout")
