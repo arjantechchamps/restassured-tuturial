@@ -1,10 +1,10 @@
 package io.techchamps.tutorial.E_RequestChainining;
 
 import io.restassured.response.Response;
+import io.techchamps.tutorial.D_authentication.HelperWithAuth;
 import org.junit.jupiter.api.Test;
 
 import static io.restassured.RestAssured.given;
-import static io.techchamps.tutorial.D_authentication.HelperWithAuth.*;
 import static org.hamcrest.CoreMatchers.equalTo;
 
 public class RequestChainingTest {
@@ -14,10 +14,10 @@ public class RequestChainingTest {
     // delete user by id
 
     @Test
-    public void RequestChainingTest(){
+    public void RequestChainingTesting(){
 
         Response signupResponse = given()
-                .spec(createBasicRequestSpecification())
+                .spec(HelperWithAuth.createBasicRequestSpecification())
                 .body("""
                         {
                           "name": "somebody",
@@ -30,7 +30,7 @@ public class RequestChainingTest {
                 .extract().response();
 
         Response findByUserName = given()
-                .spec(createAuthRequestSpecification(getAdminToken()))
+                .spec(HelperWithAuth.specWithAdminToken())
                 .pathParam("username",signupResponse.body().path("username"))
                 .get("/users/username/{username}")
                 .then().assertThat().statusCode(200)
@@ -38,7 +38,7 @@ public class RequestChainingTest {
                 .extract().response();
 
         given()
-                .spec(createAuthRequestSpecification(getAdminToken()))
+                .spec(HelperWithAuth.specWithAdminToken())
                 .when()
                 .pathParam("id",findByUserName.body().path("id"))
                 .delete("/users/{id}")

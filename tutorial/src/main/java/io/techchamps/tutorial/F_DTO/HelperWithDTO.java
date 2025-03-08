@@ -4,6 +4,7 @@ package io.techchamps.tutorial.F_DTO;
 import dto.JwtResponse;
 import dto.LoginRequest;
 import io.restassured.builder.RequestSpecBuilder;
+import io.restassured.filter.log.LogDetail;
 import io.restassured.specification.RequestSpecification;
 
 import static io.restassured.RestAssured.given;
@@ -16,15 +17,29 @@ public class HelperWithDTO {
                 .setPort(8085)
                 .setBasePath("/api")
                 .addHeader("Content-Type", "application/json")
+                .log(LogDetail.ALL)
                 .build();
     }
+    public static RequestSpecification specWithAdminToken(){
+        return given().spec(createBasicRequestSpecification())
+                .auth().oauth2(getAdminToken());
+    }
 
-    public static String getToken(RequestSpecification requestSpecification,String username, String password) {
+    public static RequestSpecification specWithUserToken(){
+        return given().spec(createBasicRequestSpecification())
+                .auth().oauth2(getAdminToken());
+    }
+    public static RequestSpecification specwithToken(String token){
+        return given().spec(createBasicRequestSpecification())
+                .auth().oauth2(token);
+    }
+
+    public static String getToken(String username, String password) {
         LoginRequest loginRequest = new LoginRequest();
         loginRequest.setUsername(username);
         loginRequest.setPassword(password);
 
-        return given().spec(requestSpecification)
+        return given().spec(createBasicRequestSpecification())
                 .body(loginRequest)
                 .when()
                 .post("/auth/signin")
@@ -38,12 +53,12 @@ public class HelperWithDTO {
                 .auth().oauth2(token);
     }
 
-    public static String getAdminToken(RequestSpecification requestSpecification) {
-        return getToken(requestSpecification,"admin","admin1234");
+    public static String getAdminToken() {
+        return getToken("admin","admin1234");
     }
 
-    public static String getUserToken(RequestSpecification requestSpecification) {
-        return getToken(requestSpecification,"user","user1234");
+    public static String getUserToken() {
+        return getToken("user","user1234");
     }
 
 }

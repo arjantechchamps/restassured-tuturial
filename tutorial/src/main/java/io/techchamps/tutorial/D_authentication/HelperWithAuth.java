@@ -30,6 +30,16 @@ public class HelperWithAuth {
                 .extract().response().path("token");
     }
 
+    public static RequestSpecification specWithAdminToken(){
+        return given().spec(createBasicRequestSpecification())
+                .auth().oauth2(getAdminToken());
+    }
+
+    public static RequestSpecification specWithUserToken(){
+        return given().spec(createBasicRequestSpecification())
+                .auth().oauth2(getAdminToken());
+    }
+
     public static RequestSpecification createAuthRequestSpecification(String token) {
         return given().spec(createBasicRequestSpecification())
                 .auth().oauth2(token);

@@ -1,11 +1,10 @@
 package io.techchamps.tutorial.F_usedto;
 
 import generated.dtos.*;
+import io.techchamps.tutorial.F_DTO.HelperWithDTO;
 import org.junit.jupiter.api.Test;
 
 import static io.restassured.RestAssured.given;
-import static io.techchamps.tutorial.D_authentication.HelperWithAuth.*;
-import static io.techchamps.tutorial.D_authentication.HelperWithAuth.createAuthRequestSpecification;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
 
@@ -17,7 +16,7 @@ public class CreateUserWithDtoTest {
         // Request chaining.
         UserResponse response =
                 given()
-                        .spec(createAuthRequestSpecification(getAdminToken()))
+                        .spec(HelperWithDTO.specWithAdminToken())
                         .body(defaultUserRequest())
                         .log().all() // log request
                         .when().post("/users")
@@ -29,7 +28,7 @@ public class CreateUserWithDtoTest {
         assertThat(response.getName(),equalTo(defaultUserRequest().getName()));
 
         given()
-                .spec(createAuthRequestSpecification(getAdminToken()))
+                .spec(HelperWithDTO.specWithAdminToken())
                 .log().all()
                 .when()
                 .pathParam("id", response.getId())

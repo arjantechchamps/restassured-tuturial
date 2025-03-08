@@ -12,7 +12,6 @@ public class BasicLoginTest3 {
     @Test
     public void loginWithValidCredentials() {
         given().spec(Helper.createBasicRequestSpecification())
-                .log().all() // log request
                 .body("""
                         {
                           "username": "admin",
@@ -25,14 +24,13 @@ public class BasicLoginTest3 {
                 .assertThat().statusCode(200)
                 .body("token", notNullValue())
                 .body("type", equalTo("Bearer"))
-                .body("roles",hasItems("ROLE_USER","ROLE_ADMIN"));;
+                .body("roles",hasItems("ROLE_USER","ROLE_ADMIN"));
 
     }
 
     @Test
     public void loginWithInValidCredentials() {
         given().spec(createBasicRequestSpecification())
-                .log().all() // log request
                 .body("""
                         {
                           "username": "dontExist",

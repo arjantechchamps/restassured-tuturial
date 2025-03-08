@@ -8,30 +8,21 @@ import io.restassured.builder.RequestSpecBuilder;
 import io.restassured.specification.RequestSpecification;
 
 import java.time.Instant;
-import java.util.Map;
-import java.util.concurrent.ConcurrentHashMap;
 
 import static io.restassured.RestAssured.given;
 
 public class HelperWithImprovedTokenHandling {
-    private static final Map<String, TokenInfo> tokenCache = new ConcurrentHashMap<>();
-    private static final long TOKEN_EXPIRY_SECONDS = 15 * 60; // 15 minutes
+    private static final ThreadLocal<TokenInfo> adminToken = new ThreadLocal<>();
+    private static final ThreadLocal<TokenInfo> userToken = new ThreadLocal<>();
 
+    // Struct to store token and expiration time
     private static class TokenInfo {
-        private final String token;
-        private final Instant expiryTime;
+        String token;
+        Instant expiry;
 
-        public TokenInfo(String token, Instant expiryTime) {
+        TokenInfo(String token, Instant expiry) {
             this.token = token;
-            this.expiryTime = expiryTime;
-        }
-
-        public boolean isExpired() {
-            return Instant.now().isAfter(expiryTime);
-        }
-
-        public String getToken() {
-            return token;
+            this.expiry = expiry;
         }
     }
 
@@ -44,30 +35,33 @@ public class HelperWithImprovedTokenHandling {
                 .build();
     }
 
-    private static String getToken(RequestSpecification requestSpecification, String username, String password, String roleKey) {
-        TokenInfo tokenInfo = tokenCache.get(roleKey);
+    public static RequestSpecification specWithAdminToken() {
+        return given().spec(createBasicRequestSpecification())
+                .auth().oauth2(getAdminToken());
+    }
 
-        if (tokenInfo != null && !tokenInfo.isExpired()) {
-            return tokenInfo.getToken();
-        }
+    public static RequestSpecification specWithUserToken() {
+        return given().spec(createBasicRequestSpecification())
+                .auth().oauth2(getAdminToken());
+    }
 
-        // Request new token
+    public static RequestSpecification specwithToken(String token) {
+        return given().spec(createBasicRequestSpecification())
+                .auth().oauth2(token);
+    }
+
+    public static String getToken(String username, String password) {
         LoginRequest loginRequest = new LoginRequest();
         loginRequest.setUsername(username);
         loginRequest.setPassword(password);
 
-        String token = given().spec(requestSpecification)
+        return given().spec(createBasicRequestSpecification())
                 .body(loginRequest)
                 .when()
                 .post("/auth/signin")
                 .then()
                 .assertThat().statusCode(200)
                 .extract().response().as(JwtResponse.class).getToken();
-
-        // Store the token with its expiration time
-        tokenCache.put(roleKey, new TokenInfo(token, Instant.now().plusSeconds(TOKEN_EXPIRY_SECONDS)));
-
-        return token;
     }
 
     public static RequestSpecification createAuthRequestSpecification(String token) {
@@ -75,17 +69,23 @@ public class HelperWithImprovedTokenHandling {
                 .auth().oauth2(token);
     }
 
-    public static String getAdminToken(RequestSpecification requestSpecification) {
-        return getToken(requestSpecification,
-                ConfigProperties.getProperty("adminUsername"),
-                ConfigProperties.getProperty("adminPassword"),
-                "admin");
+    public static String getAdminToken() {
+        TokenInfo tokenInfo = adminToken.get();
+        if (tokenInfo == null || tokenInfo.expiry.isBefore(Instant.now())) {
+            String token = getToken(ConfigProperties.getProperty("adminUsername"), ConfigProperties.getProperty("adminPassword"));
+            adminToken.set(new TokenInfo(token, Instant.now().plusSeconds(14 * 60)));
+        }
+        return adminToken.get().token;
+
     }
 
-    public static String getUserToken(RequestSpecification requestSpecification) {
-        return getToken(requestSpecification,
-                ConfigProperties.getProperty("userUsername"),
-                ConfigProperties.getProperty("userPassword"),
-                "user");
+    public static String getUserToken() {
+        TokenInfo tokenInfo = userToken.get();
+        if (tokenInfo == null || tokenInfo.expiry.isBefore(Instant.now())) {
+            String token = getToken(ConfigProperties.getProperty("userUsername"), ConfigProperties.getProperty("userPassword"));
+            userToken.set(new TokenInfo(token, Instant.now().plusSeconds(14 * 60)));
+        }
+        return userToken.get().token;
+
     }
 }

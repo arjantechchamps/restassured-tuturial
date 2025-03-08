@@ -24,7 +24,6 @@ public class GetAllUsersTest {
 
         // first login and save the token from the response
         String token = given().spec(Helper.createBasicRequestSpecification())
-                .log().all() // log request
                 .body("""
                         {
                           "username": "admin",
@@ -39,7 +38,6 @@ public class GetAllUsersTest {
 
         given().spec(Helper.createBasicRequestSpecification())
                 .header("Authorization", "Bearer " + token)
-                .log().all() // log request
                 .when().get("/users")
                 .then().assertThat().statusCode(200)
                 .log().all();

@@ -6,11 +6,10 @@ import Builders.UserRequestBuilder;
 import generated.dtos.ProfileRequest;
 import generated.dtos.UserRequest;
 import generated.dtos.UserResponse;
+import io.techchamps.tutorial.F_DTO.HelperWithDTO;
 import org.junit.jupiter.api.Test;
 
 import static io.restassured.RestAssured.given;
-import static io.techchamps.tutorial.D_authentication.HelperWithAuth.*;
-import static io.techchamps.tutorial.D_authentication.HelperWithAuth.createAuthRequestSpecification;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
 
@@ -27,7 +26,7 @@ public class CreateUserWithUserBuilderTest {
                 .build();
 
         UserResponse userResponse = given()
-                .spec(createAuthRequestSpecification(getAdminToken()))
+                .spec(HelperWithDTO.specWithAdminToken())
                 .body(userRequest)
                 .log().all() // log request
                 .when().post("/users")
@@ -38,7 +37,7 @@ public class CreateUserWithUserBuilderTest {
         assertThat(userResponse.getName(), equalTo(userRequest.getName()));
 
         given()
-                .spec(createAuthRequestSpecification(getAdminToken()))
+                .spec(HelperWithDTO.specWithAdminToken())
                 .log().all()
                 .when()
                 .pathParam("id", userResponse.getId())

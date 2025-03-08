@@ -1,9 +1,9 @@
 package io.techchamps.tutorial.F_usedto;
 
+import io.techchamps.tutorial.F_DTO.HelperWithDTO;
 import org.junit.jupiter.api.Test;
 
 import static io.restassured.RestAssured.given;
-import static io.techchamps.tutorial.D_authentication.HelperWithAuth.*;
 import static org.hamcrest.Matchers.*;
 
 
@@ -14,7 +14,7 @@ public class CreateUserTest {
     public void addUser() {
 
         given()
-                .spec(createAuthRequestSpecification(getAdminToken()))
+                .spec(HelperWithDTO.specWithAdminToken())
                 .body("""
                            {
                              "name": "John",
@@ -57,7 +57,7 @@ public class CreateUserTest {
         // Request chaining.
 
         int userid = given()
-                .spec(createAuthRequestSpecification(getAdminToken()))
+                .spec(HelperWithDTO.specWithAdminToken())
                 .body("""
                            {
                              "name": "Joe",
@@ -99,7 +99,7 @@ public class CreateUserTest {
                 .extract().response().path("id");
 
         given()
-                .spec(createAuthRequestSpecification(getAdminToken()))
+                .spec(HelperWithDTO.specWithAdminToken())
                 .log().all()
                 .when()
                 .pathParam("id", userid)
