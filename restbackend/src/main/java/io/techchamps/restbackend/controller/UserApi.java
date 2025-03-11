@@ -49,6 +49,11 @@ public class UserApi {
 
     @PreAuthorize("hasRole('ADMIN')")
     @GetMapping
+    @ApiResponses({
+            @ApiResponse(responseCode = "200", description = "Successful get", content = @Content(mediaType = "application/json", schema = @Schema(implementation = UserResponse.class))),
+            @ApiResponse(responseCode = "401", description = "Unauthorised", content = @Content(mediaType = "application/json", schema = @Schema(implementation = ErrorResponse.class))),
+            @ApiResponse(responseCode = "500", description = "Internal server error", content = @Content(mediaType = "application/json", schema = @Schema(implementation = ErrorResponse.class)))
+    })
     public ResponseEntity<Object> getAllUsers() {
         try {
             List<User> users = userService.getAllUsers();
