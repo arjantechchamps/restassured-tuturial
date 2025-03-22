@@ -15,7 +15,7 @@ public class HelperWithAuth {
                 .addHeader("Content-Type", "application/json")
                 .build();
     }
-
+ 
     public static String getToken(String username, String password) {
         return given().spec(createBasicRequestSpecification())
                 .body(String.format("""
