@@ -2,10 +2,10 @@ package io.techchamps.tutorial.H_Token;
 
 
 import config.ConfigProperties;
-import dto.JwtResponse;
-import dto.LoginRequest;
 import io.restassured.builder.RequestSpecBuilder;
 import io.restassured.specification.RequestSpecification;
+import io.techchamps.tutorial.dto.JwtResponse;
+import io.techchamps.tutorial.dto.LoginRequest;
 
 import java.time.Instant;
 

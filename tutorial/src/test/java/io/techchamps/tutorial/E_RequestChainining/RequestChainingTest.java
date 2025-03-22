@@ -17,7 +17,7 @@ public class RequestChainingTest {
     public void RequestChainingTesting(){
 
         Response signupResponse = given()
-                .spec(HelperWithAuth.createBasicRequestSpecification())
+                .spec(HelperWithAuth.spec())
                 .body("""
                         {
                           "name": "somebody",
@@ -30,7 +30,7 @@ public class RequestChainingTest {
                 .extract().response();
 
         Response findByUserName = given()
-                .spec(HelperWithAuth.specWithAdminToken())
+                .spec(HelperWithAuth.specWithAdminOauth())
                 .pathParam("username",signupResponse.body().path("username"))
                 .get("/users/username/{username}")
                 .then().assertThat().statusCode(200)
@@ -38,11 +38,17 @@ public class RequestChainingTest {
                 .extract().response();
 
         given()
-                .spec(HelperWithAuth.specWithAdminToken())
+                .spec(HelperWithAuth.specWithAdminOauth())
                 .when()
                 .pathParam("id",findByUserName.body().path("id"))
                 .delete("/users/{id}")
                 .then().assertThat().statusCode(200);
+
+         given()
+                .spec(HelperWithAuth.specWithAdminOauth())
+                .pathParam("username",signupResponse.body().path("username"))
+                .get("/users/username/{username}")
+                .then().assertThat().statusCode(404);
 
     }
 }

@@ -7,7 +7,8 @@ import io.restassured.specification.RequestSpecification;
 
 public class Helper {
 
-    public static RequestSpecification createBasicRequestSpecification() {
+    // Creates and returns a basic request specification
+    public static RequestSpecification spec() {
         return new RequestSpecBuilder()
                 .setBaseUri("http://localhost")
                 .setPort(8085)

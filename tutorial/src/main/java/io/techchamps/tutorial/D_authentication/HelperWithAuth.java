@@ -7,7 +7,8 @@ import static io.restassured.RestAssured.given;
 
 public class HelperWithAuth {
 
-    public static RequestSpecification createBasicRequestSpecification() {
+    // Creates and returns a basic request specification without authentication
+    public static RequestSpecification spec() {
         return new RequestSpecBuilder()
                 .setBaseUri("http://localhost")
                 .setPort(8085)
@@ -15,9 +16,28 @@ public class HelperWithAuth {
                 .addHeader("Content-Type", "application/json")
                 .build();
     }
- 
+
+    // Returns a request specification with OAuth2 authentication using a provided token
+    public static RequestSpecification specWithOauth(String token) {
+        return given().spec(spec())
+                .auth().oauth2(token);
+    }
+
+    // Returns a request specification with OAuth2 authentication for an admin user
+    public static RequestSpecification specWithAdminOauth() {
+        return given().spec(spec())
+                .auth().oauth2(getAdminToken());
+    }
+
+    // Returns a request specification with OAuth2 authentication for a regular user
+    public static RequestSpecification specWithUserOauth() {
+        return given().spec(spec())
+                .auth().oauth2(getUserToken());
+    }
+
+    // Sends a POST request to authenticate a user and retrieves the authentication token
     public static String getToken(String username, String password) {
-        return given().spec(createBasicRequestSpecification())
+        return given().spec(spec())
                 .body(String.format("""
                         {
                           "username": "%s",
@@ -30,27 +50,14 @@ public class HelperWithAuth {
                 .extract().response().path("token");
     }
 
-    public static RequestSpecification specWithAdminToken(){
-        return given().spec(createBasicRequestSpecification())
-                .auth().oauth2(getAdminToken());
-    }
-
-    public static RequestSpecification specWithUserToken(){
-        return given().spec(createBasicRequestSpecification())
-                .auth().oauth2(getAdminToken());
-    }
-
-    public static RequestSpecification createAuthRequestSpecification(String token) {
-        return given().spec(createBasicRequestSpecification())
-                .auth().oauth2(token);
-    }
-
+    // Retrieves the authentication token for an admin user
     public static String getAdminToken() {
-        return getToken("admin","admin1234");
+        return getToken("admin", "admin1234");
     }
 
+    // Retrieves the authentication token for a regular user
     public static String getUserToken() {
-        return getToken("user","user1234");
+        return getToken("user", "user1234");
     }
 
 }
