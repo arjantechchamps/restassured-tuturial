@@ -1,10 +1,15 @@
-package dto;
+package io.techchamps.restbackend.response;
 
-public class LoginRequest {
+public class SignupResponse {
 
-    String username;
+    private String username;
 
-    String password;
+    private String password;
+
+    public SignupResponse(String username, String password) {
+        this.username = username;
+        this.password = password;
+    }
 
     public String getUsername() {
         return username;
