@@ -6,6 +6,7 @@ import generated.dtos.UserResponse;
 import io.restassured.response.Response;
 import io.techchamps.tutorial.Builders.UserRequestBuilder;
 import io.techchamps.tutorial.helpers.HelperWithAuth;
+import io.techchamps.tutorial.helpers.HelperWithDTO;
 import org.junit.jupiter.api.Test;
 
 import static io.restassured.RestAssured.given;
@@ -17,7 +18,7 @@ public class UserTest {
     @Test
     public void AddUser() {
 
-     Response response   = given().spec(HelperWithAuth.specWithAdminOauth())
+     Response response   = given().spec(HelperWithDTO.specWithAdminOauth())
                 .body("""
                            {
                              "name": "John",

@@ -1,10 +1,9 @@
 package io.techchamps.tutorial.helpers;
 
+import generated.dtos.LoginRequest;
 import io.restassured.builder.RequestSpecBuilder;
 import io.restassured.specification.RequestSpecification;
 import io.techchamps.tutorial.config.PropertieHelper;
-import io.techchamps.tutorial.dto.JwtResponse;
-import io.techchamps.tutorial.dto.LoginRequest;
 
 import java.time.Instant;
 
@@ -25,49 +24,49 @@ public class HelperWithImprovedTokenHandling {
         }
     }
 
-    public static RequestSpecification createBasicRequestSpecification() {
+    // Creates and returns a basic request specification without authentication
+    public static RequestSpecification spec() {
         return new RequestSpecBuilder()
-                .setBaseUri(PropertieHelper.getProperty("baseUri"))
-                .setPort(PropertieHelper.getIntProperty("port"))
-                .setBasePath(PropertieHelper.getProperty("basePath"))
+                .setBaseUri("http://localhost")
+                .setPort(8085)
+                .setBasePath("/api")
                 .addHeader("Content-Type", "application/json")
                 .build();
     }
 
-    public static RequestSpecification specWithAdminToken() {
-        return given().spec(createBasicRequestSpecification())
-                .auth().oauth2(getAdminToken());
-    }
-
-    public static RequestSpecification specWithUserToken() {
-        return given().spec(createBasicRequestSpecification())
-                .auth().oauth2(getAdminToken());
-    }
-
-    public static RequestSpecification specwithToken(String token) {
-        return given().spec(createBasicRequestSpecification())
+    // Returns a request specification with OAuth2 authentication using a provided token
+    public static RequestSpecification specWithOauth(String token) {
+        return given().spec(spec())
                 .auth().oauth2(token);
     }
 
+    // Returns a request specification with OAuth2 authentication for an admin user
+    public static RequestSpecification specWithAdminOauth() {
+        return given().spec(spec())
+                .auth().oauth2(getAdminToken());
+    }
+
+    // Returns a request specification with OAuth2 authentication for a regular user
+    public static RequestSpecification specWithUserOauth() {
+        return given().spec(spec())
+                .auth().oauth2(getUserToken());
+    }
+
+    // Sends a POST request to authenticate a user and retrieves the authentication token
     public static String getToken(String username, String password) {
         LoginRequest loginRequest = new LoginRequest();
         loginRequest.setUsername(username);
         loginRequest.setPassword(password);
-
-        return given().spec(createBasicRequestSpecification())
+        return given().spec(spec())
                 .body(loginRequest)
                 .when()
                 .post("/auth/signin")
                 .then()
                 .assertThat().statusCode(200)
-                .extract().response().as(JwtResponse.class).getToken();
+                .extract().response().path("token");
     }
 
-    public static RequestSpecification createAuthRequestSpecification(String token) {
-        return given().spec(createBasicRequestSpecification())
-                .auth().oauth2(token);
-    }
-
+    // Retrieves the authentication token for an admin user
     public static String getAdminToken() {
         TokenInfo tokenInfo = adminToken.get();
         if (tokenInfo == null || tokenInfo.expiry.isBefore(Instant.now())) {
@@ -78,6 +77,7 @@ public class HelperWithImprovedTokenHandling {
 
     }
 
+    // Retrieves the authentication token for a regular user
     public static String getUserToken() {
         TokenInfo tokenInfo = userToken.get();
         if (tokenInfo == null || tokenInfo.expiry.isBefore(Instant.now())) {
