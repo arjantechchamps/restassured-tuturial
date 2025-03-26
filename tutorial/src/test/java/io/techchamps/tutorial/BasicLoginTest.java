@@ -132,11 +132,7 @@ public class BasicLoginTest {
         //extract the response as ErrorResponse class
         ErrorResponse errorResponse =
         given().spec(Helper.spec())
-                .body("""
-                        {
-                          "username": "dontExist",
-                          "password": "wrong1234"
-                        }""")
+                .body(loginRequest)
                 .when()
                 .post("/auth/signin")
                 .then()
