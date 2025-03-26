@@ -1,4 +1,4 @@
-package io.techchamps.tutorial.D_authentication;
+package io.techchamps.tutorial.helpers;
 
 import io.restassured.builder.RequestSpecBuilder;
 import io.restassured.specification.RequestSpecification;

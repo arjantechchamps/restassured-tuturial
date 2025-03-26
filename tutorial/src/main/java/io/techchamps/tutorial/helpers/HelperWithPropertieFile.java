@@ -1,10 +1,10 @@
-package io.techchamps.tutorial.G_PropertieFile;
+package io.techchamps.tutorial.helpers;
 
 
-import config.ConfigProperties;
 import io.restassured.builder.RequestSpecBuilder;
 import io.restassured.filter.log.LogDetail;
 import io.restassured.specification.RequestSpecification;
+import io.techchamps.tutorial.config.PropertieHelper;
 import io.techchamps.tutorial.dto.JwtResponse;
 import io.techchamps.tutorial.dto.LoginRequest;
 
@@ -14,9 +14,9 @@ public class HelperWithPropertieFile {
 
     public static RequestSpecification createBasicRequestSpecification() {
         return new RequestSpecBuilder()
-                .setBaseUri(ConfigProperties.getProperty("baseUri"))
-                .setPort(ConfigProperties.getIntProperty("port"))
-                .setBasePath(ConfigProperties.getProperty("basePath"))
+                .setBaseUri(PropertieHelper.getProperty("baseUri"))
+                .setPort(PropertieHelper.getIntProperty("port"))
+                .setBasePath(PropertieHelper.getProperty("basePath"))
                 .addHeader("Content-Type", "application/json")
                 .log(LogDetail.ALL)
                 .build();
@@ -55,7 +55,7 @@ public class HelperWithPropertieFile {
     }
 
     public static String getAdminToken() {
-        return getToken(ConfigProperties.getProperty("adminUsername"),ConfigProperties.getProperty("adminPassword"));
+        return getToken(PropertieHelper.getProperty("adminUsername"), PropertieHelper.getProperty("adminPassword"));
     }
 
     public static String getUserToken() {

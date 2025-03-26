@@ -1,6 +1,6 @@
 package io.techchamps.tutorial.F_usedto;
 
-import io.techchamps.tutorial.F_DTO.HelperWithDTO;
+import io.techchamps.tutorial.helpers.HelperWithDTO;
 import org.junit.jupiter.api.Test;
 
 import static io.restassured.RestAssured.given;

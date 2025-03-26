@@ -1,4 +1,4 @@
-package io.techchamps.tutorial.C_helperclass;
+package io.techchamps.tutorial.helpers;
 
 import io.restassured.builder.RequestSpecBuilder;
 import io.restassured.filter.log.LogDetail;

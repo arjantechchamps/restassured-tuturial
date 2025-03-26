@@ -1,9 +1,8 @@
-package io.techchamps.tutorial.H_Token;
+package io.techchamps.tutorial.helpers;
 
-
-import config.ConfigProperties;
 import io.restassured.builder.RequestSpecBuilder;
 import io.restassured.specification.RequestSpecification;
+import io.techchamps.tutorial.config.PropertieHelper;
 import io.techchamps.tutorial.dto.JwtResponse;
 import io.techchamps.tutorial.dto.LoginRequest;
 
@@ -28,9 +27,9 @@ public class HelperWithImprovedTokenHandling {
 
     public static RequestSpecification createBasicRequestSpecification() {
         return new RequestSpecBuilder()
-                .setBaseUri(ConfigProperties.getProperty("baseUri"))
-                .setPort(ConfigProperties.getIntProperty("port"))
-                .setBasePath(ConfigProperties.getProperty("basePath"))
+                .setBaseUri(PropertieHelper.getProperty("baseUri"))
+                .setPort(PropertieHelper.getIntProperty("port"))
+                .setBasePath(PropertieHelper.getProperty("basePath"))
                 .addHeader("Content-Type", "application/json")
                 .build();
     }
@@ -72,7 +71,7 @@ public class HelperWithImprovedTokenHandling {
     public static String getAdminToken() {
         TokenInfo tokenInfo = adminToken.get();
         if (tokenInfo == null || tokenInfo.expiry.isBefore(Instant.now())) {
-            String token = getToken(ConfigProperties.getProperty("adminUsername"), ConfigProperties.getProperty("adminPassword"));
+            String token = getToken(PropertieHelper.getProperty("adminUsername"), PropertieHelper.getProperty("adminPassword"));
             adminToken.set(new TokenInfo(token, Instant.now().plusSeconds(14 * 60)));
         }
         return adminToken.get().token;
@@ -82,7 +81,7 @@ public class HelperWithImprovedTokenHandling {
     public static String getUserToken() {
         TokenInfo tokenInfo = userToken.get();
         if (tokenInfo == null || tokenInfo.expiry.isBefore(Instant.now())) {
-            String token = getToken(ConfigProperties.getProperty("userUsername"), ConfigProperties.getProperty("userPassword"));
+            String token = getToken(PropertieHelper.getProperty("userUsername"), PropertieHelper.getProperty("userPassword"));
             userToken.set(new TokenInfo(token, Instant.now().plusSeconds(14 * 60)));
         }
         return userToken.get().token;

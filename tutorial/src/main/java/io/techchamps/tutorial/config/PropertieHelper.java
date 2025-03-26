@@ -1,4 +1,4 @@
-package config;
+package io.techchamps.tutorial.config;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -7,10 +7,10 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.Properties;
 
-public class ConfigProperties {
+public class PropertieHelper {
 
     private static final Properties properties;
-    private static final Logger logger = LoggerFactory.getLogger(ConfigProperties.class);
+    private static final Logger logger = LoggerFactory.getLogger(PropertieHelper.class);
     private static final String DEFAULT_PROPERTIES_FILE = "config.properties";
     private static final String ENV_VARIABLE_NAME = "CONFIG_PROPERTIES_FILE";
 
@@ -21,7 +21,7 @@ public class ConfigProperties {
             propertiesFile = DEFAULT_PROPERTIES_FILE;
         }
 
-        try (InputStream input = ConfigProperties.class.getClassLoader().getResourceAsStream(propertiesFile)) {
+        try (InputStream input = PropertieHelper.class.getClassLoader().getResourceAsStream(propertiesFile)) {
             if (input == null) {
                 throw new RuntimeException("Sorry, unable to find " + propertiesFile);
             }
@@ -39,4 +39,3 @@ public class ConfigProperties {
         return Integer.parseInt(properties.getProperty(key));
     }
 }
-

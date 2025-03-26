@@ -1,7 +1,7 @@
 package io.techchamps.tutorial.E_RequestChainining;
 
 import io.restassured.response.Response;
-import io.techchamps.tutorial.D_authentication.HelperWithAuth;
+import io.techchamps.tutorial.helpers.HelperWithAuth;
 import org.junit.jupiter.api.Test;
 
 import static io.restassured.RestAssured.given;

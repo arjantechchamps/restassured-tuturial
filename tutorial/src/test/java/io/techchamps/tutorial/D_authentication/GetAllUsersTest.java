@@ -1,6 +1,6 @@
 package io.techchamps.tutorial.D_authentication;
 
-import io.techchamps.tutorial.C_helperclass.Helper;
+import io.techchamps.tutorial.helpers.Helper;
 import org.junit.jupiter.api.Test;
 
 import static io.restassured.RestAssured.given;
