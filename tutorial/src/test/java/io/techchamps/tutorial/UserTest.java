@@ -1,4 +1,4 @@
-package io.techchamps.tutorial.basic;
+package io.techchamps.tutorial;
 
 
 import generated.dtos.UserRequest;

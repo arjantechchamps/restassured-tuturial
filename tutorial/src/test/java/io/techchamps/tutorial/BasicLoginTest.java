@@ -1,7 +1,8 @@
-package io.techchamps.tutorial.basic;
+package io.techchamps.tutorial;
 
-import io.techchamps.tutorial.dto.JwtResponse;
-import io.techchamps.tutorial.dto.LoginRequest;
+import generated.dtos.ErrorResponse;
+import generated.dtos.LoginRequest;
+import generated.dtos.JwtResponse;
 import io.techchamps.tutorial.helpers.Helper;
 import org.junit.jupiter.api.Test;
 
@@ -13,8 +14,9 @@ public class BasicLoginTest {
 
     @Test
     public void loginWithValidCredentials() {
-
+        // Given when then syntax
         given()
+                //log the request
                 .log().all() // log request
                 .baseUri("http://localhost")
                 .port(8085)
@@ -28,6 +30,7 @@ public class BasicLoginTest {
                 .when()
                 .post("/auth/signin")
                 .then()
+                //log the response
                 .log().all()
                 .assertThat().statusCode(200)
                 .body("token", notNullValue())
@@ -61,6 +64,7 @@ public class BasicLoginTest {
 
     @Test
     public void improvedloginWithValidCredentials() {
+        //Use the Helper class
         given().spec(Helper.spec())
                 .body("""
                         {
@@ -79,7 +83,7 @@ public class BasicLoginTest {
 
     @Test
     public void improvedloginWithInValidCredentials() {
-
+        //Use the Helper class
         given().spec(Helper.spec())
                 .body("""
                         {
@@ -97,7 +101,7 @@ public class BasicLoginTest {
 
     @Test
     public void useDtoWithValidCredentials() {
-        //Use dto to create the loginrequest
+        //Use dto to create the login request
         LoginRequest loginRequest = new LoginRequest();
         loginRequest.setUsername("admin");
         loginRequest.setPassword("admin1234");
@@ -115,5 +119,32 @@ public class BasicLoginTest {
        assertThat(jwtResponse.getToken(),notNullValue());
        assertThat(jwtResponse.getType(),equalTo("Bearer"));
        assertThat(jwtResponse.getRoles(),hasItems("ROLE_USER","ROLE_ADMIN"));
+    }
+
+    @Test
+    public void useDtoWithInValidCredentials() {
+
+        //Use dto to create the login request
+        LoginRequest loginRequest = new LoginRequest();
+        loginRequest.setUsername("dontExist");
+        loginRequest.setPassword("wrong1234");
+
+        //extract the response as ErrorResponse class
+        ErrorResponse errorResponse =
+        given().spec(Helper.spec())
+                .body("""
+                        {
+                          "username": "dontExist",
+                          "password": "wrong1234"
+                        }""")
+                .when()
+                .post("/auth/signin")
+                .then()
+                .log().all()
+                .assertThat().statusCode(401)
+                .extract().response().as(ErrorResponse.class);
+
+        assertThat(errorResponse.getError(),equalTo("authentication_error"));
+        assertThat(errorResponse.getMessage(),equalTo("Invalid username or password"));
     }
 }

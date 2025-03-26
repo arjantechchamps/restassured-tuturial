@@ -1,4 +1,4 @@
-package io.techchamps.tutorial.basic;
+package io.techchamps.tutorial;
 
 import io.techchamps.tutorial.helpers.Helper;
 import io.techchamps.tutorial.helpers.HelperWithAuth;

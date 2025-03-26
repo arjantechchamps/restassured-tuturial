@@ -1,4 +1,4 @@
-package io.techchamps.tutorial.basic;
+package io.techchamps.tutorial;
 
 
 import generated.dtos.SignUpRequest;
@@ -68,7 +68,7 @@ public class RequestChainingTest {
         signUpRequest.setName("somebody");
         signUpRequest.setEmail("somebody@test.nl");
         signUpRequest.setPassword("somebody1234");
-        //extract the entire response
+        //extract the entire response as SignupResponse
         SignupResponse signupResponse = given()
                 .spec(HelperWithAuth.spec())
                 .when()
@@ -78,7 +78,7 @@ public class RequestChainingTest {
                 .assertThat().statusCode(200)
                 .extract().as(SignupResponse.class);
 
-        //extract the entire response
+        //extract the entire response as UserResponse
         UserResponse getByUserNameResponse = given()
                 .spec(HelperWithAuth.specWithAdminOauth())
                 //use the username from the signupresponse as a pathParameter
