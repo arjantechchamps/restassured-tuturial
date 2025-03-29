@@ -1,6 +1,7 @@
 package io.techchamps.tutorial.helpers;
 
 import io.restassured.builder.RequestSpecBuilder;
+import io.restassured.filter.log.LogDetail;
 import io.restassured.specification.RequestSpecification;
 
 import static io.restassured.RestAssured.given;
@@ -14,6 +15,7 @@ public class HelperWithAuth {
                 .setPort(8085)
                 .setBasePath("/api")
                 .addHeader("Content-Type", "application/json")
+                .log(LogDetail.ALL)
                 .build();
     }
 
