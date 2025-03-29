@@ -21,12 +21,12 @@ public class HelperWithPropertieFile {
                 .log(LogDetail.ALL)
                 .build();
     }
-    public static RequestSpecification specWithAdminToken(){
+    public static RequestSpecification specWithAdminOauth(){
         return given().spec(createBasicRequestSpecification())
                 .auth().oauth2(getAdminToken());
     }
 
-    public static RequestSpecification specWithUserToken(){
+    public static RequestSpecification specWithUserOauth(){
         return given().spec(createBasicRequestSpecification())
                 .auth().oauth2(getAdminToken());
     }
