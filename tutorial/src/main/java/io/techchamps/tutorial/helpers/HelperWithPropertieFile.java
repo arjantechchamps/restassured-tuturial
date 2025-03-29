@@ -1,12 +1,12 @@
 package io.techchamps.tutorial.helpers;
 
 
+import generated.dtos.JwtResponse;
+import generated.dtos.LoginRequest;
 import io.restassured.builder.RequestSpecBuilder;
 import io.restassured.filter.log.LogDetail;
 import io.restassured.specification.RequestSpecification;
 import io.techchamps.tutorial.config.PropertieHelper;
-import io.techchamps.tutorial.dto.JwtResponse;
-import io.techchamps.tutorial.dto.LoginRequest;
 
 import static io.restassured.RestAssured.given;
 
@@ -59,7 +59,7 @@ public class HelperWithPropertieFile {
     }
 
     public static String getUserToken() {
-        return getToken("userUsername","userPassword");
+        return getToken(PropertieHelper.getProperty("userUsername"),PropertieHelper.getProperty("userPassword"));
     }
 
 }
