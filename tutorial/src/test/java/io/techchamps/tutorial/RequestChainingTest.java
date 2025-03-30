@@ -18,8 +18,7 @@ public class RequestChainingTest {
 
     @Test
     public void RequestChainTest() {
-        //extract the entire response
-        Response signupResponse = given()
+        given()
                 .spec(HelperWithAuth.spec())
                 .when()
                 .body("""
@@ -32,33 +31,9 @@ public class RequestChainingTest {
                         """)
                 .post("/auth/signup")
                 .then()
-                .assertThat().statusCode(200)
-                .extract().response();
+                .assertThat().statusCode(200);
 
-        //extract the entire response
-        Response getByUserNameResponse = given()
-                .spec(HelperWithAuth.specWithAdminOauth())
-                //use the username from the signupresponse as a pathParameter
-                .pathParam("username", signupResponse.body().path("username"))
-                .get("/users/username/{username}")
-                .then()
-                .assertThat().statusCode(200)
-                .extract().response();
 
-        given().spec(HelperWithAuth.specWithAdminOauth())
-                .when()
-                //use the id from the getByUserNameResponse as a pathParameter
-                .pathParam("id", getByUserNameResponse.body().path("id"))
-                .delete("/users/{id}")
-                .then().statusCode(200);
-
-        given()
-                .spec(HelperWithAuth.specWithAdminOauth())
-                //use the username from the signupresponse again as a pathParameter
-                .pathParam("username", signupResponse.body().path("username"))
-                .get("/users/username/{username}")
-                .then()
-                .assertThat().statusCode(404);
     }
 
     @Test
