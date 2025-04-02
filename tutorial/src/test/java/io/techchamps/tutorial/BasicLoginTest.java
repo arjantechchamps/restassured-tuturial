@@ -16,7 +16,6 @@ public class BasicLoginTest {
     public void loginWithValidCredentials() {
         // Given when then syntax
         given()
-                //log the request
                 .log().all() // log request
                 .baseUri("http://localhost")
                 .port(8085)
