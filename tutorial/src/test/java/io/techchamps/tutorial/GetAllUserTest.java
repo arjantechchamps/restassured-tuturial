@@ -17,11 +17,10 @@ public class GetAllUserTest {
                 .baseUri("http://localhost")
                 .port(8085)
                 .basePath("/api")
-                .log().all() // log request
                 .when().get("/users")
                 .then()
-                .log().all();
-//                .assertThat().statusCode(200);
+                .log().all()
+                .assertThat().statusCode(200);
     }
 
     @Test
