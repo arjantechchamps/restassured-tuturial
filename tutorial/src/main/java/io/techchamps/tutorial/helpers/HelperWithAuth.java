@@ -20,9 +20,9 @@ public class HelperWithAuth {
     }
 
     // Returns a request specification with OAuth2 authentication using a provided token
-    public static RequestSpecification specWithOauth(String token) {
+    public static RequestSpecification specWithOauth(String username,String password) {
         return given().spec(spec())
-                .auth().oauth2(token);
+                .auth().oauth2(getToken(username,password));
     }
 
     // Returns a request specification with OAuth2 authentication for an admin user
