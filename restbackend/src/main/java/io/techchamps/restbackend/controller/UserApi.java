@@ -1,5 +1,6 @@
 package io.techchamps.restbackend.controller;
 
+import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -32,6 +33,8 @@ import java.util.stream.Collectors;
 @RequestMapping("/api/users")
 public class UserApi {
 
+    private static final String SERVER_ERROR ="server_error";
+
     @Autowired
     private UserService userService;
 
@@ -46,13 +49,14 @@ public class UserApi {
 
 
     // Method to get all users
-
+    @Operation(description = "This endpoint requires the ADMIN role")
     @PreAuthorize("hasRole('ADMIN')")
     @GetMapping
     @ApiResponses({
             @ApiResponse(responseCode = "200", description = "Successful get", content = @Content(mediaType = "application/json", schema = @Schema(implementation = UserResponse.class))),
             @ApiResponse(responseCode = "401", description = "Unauthorised", content = @Content(mediaType = "application/json", schema = @Schema(implementation = ErrorResponse.class))),
-            @ApiResponse(responseCode = "500", description = "Internal server error", content = @Content(mediaType = "application/json", schema = @Schema(implementation = ErrorResponse.class)))
+            @ApiResponse(responseCode = "500", description = "Internal server error", content = @Content(mediaType = "application/json", schema = @Schema(implementation = ErrorResponse.class))),
+
     })
     public ResponseEntity<Object> getAllUsers() {
         try {
@@ -68,7 +72,7 @@ public class UserApi {
         }
         catch (Exception e) {
             // Handle other errors
-            ErrorResponse error = new ErrorResponse("An error occurred while retrieving users", HttpStatus.INTERNAL_SERVER_ERROR.value(), "server_error");
+            ErrorResponse error = new ErrorResponse("An error occurred while retrieving users", HttpStatus.INTERNAL_SERVER_ERROR.value(), SERVER_ERROR);
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(error);  // Error response
         }
     }
@@ -78,7 +82,7 @@ public class UserApi {
     @GetMapping("/{id}")
     public ResponseEntity<Object> getUserById(@PathVariable int id) {
         try {
-            User user = userService.findById(id).orElseThrow(() -> new NotFoundException("User with ID " + id + " not found!"));
+            User user = userService.findById(id).orElseThrow(() -> new NotFoundException("User with ID " + id + "not found!"));
             UserResponse userResponse = modelMapper.map(user, UserResponse.class);
             return ResponseEntity.ok(userResponse);
         } catch (NotFoundException e) {
@@ -88,7 +92,7 @@ public class UserApi {
             ErrorResponse error = new ErrorResponse("Access Denied", HttpStatus.FORBIDDEN.value(), "access_denied");
             return ResponseEntity.status(HttpStatus.FORBIDDEN).body(error);
         } catch (Exception e) {
-            ErrorResponse error = new ErrorResponse("An unexpected error occurred", HttpStatus.INTERNAL_SERVER_ERROR.value(), "server_error");
+            ErrorResponse error = new ErrorResponse("An unexpected error occurred", HttpStatus.INTERNAL_SERVER_ERROR.value(), SERVER_ERROR);
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(error);
         }
     }
@@ -151,7 +155,7 @@ public class UserApi {
                     .body(new ErrorResponse("Role not found", 400, "role_not_found"));
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                    .body(new ErrorResponse("Error creating user", 500, "server_error"));
+                    .body(new ErrorResponse("Error creating user", 500, SERVER_ERROR));
         }
     }
 
@@ -167,7 +171,7 @@ public class UserApi {
             ErrorResponse error = new ErrorResponse("User not found", HttpStatus.NOT_FOUND.value(), "user_not_found");
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(error);
         } catch (Exception e) {
-            ErrorResponse error = new ErrorResponse("An unexpected error occurred", HttpStatus.INTERNAL_SERVER_ERROR.value(), "server_error");
+            ErrorResponse error = new ErrorResponse("An unexpected error occurred", HttpStatus.INTERNAL_SERVER_ERROR.value(), SERVER_ERROR);
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(error);
         }
     }
@@ -220,7 +224,7 @@ public class UserApi {
             ErrorResponse error = new ErrorResponse("User not found", HttpStatus.NOT_FOUND.value(), "user_not_found");
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(error);
         } catch (Exception e) {
-            ErrorResponse error = new ErrorResponse("An error occurred while deleting the user", HttpStatus.INTERNAL_SERVER_ERROR.value(), "server_error");
+            ErrorResponse error = new ErrorResponse("An error occurred while deleting the user", HttpStatus.INTERNAL_SERVER_ERROR.value(), SERVER_ERROR);
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(error);
         }
     }
