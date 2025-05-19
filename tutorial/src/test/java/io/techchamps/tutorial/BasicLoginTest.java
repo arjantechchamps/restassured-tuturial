@@ -1,8 +1,8 @@
 package io.techchamps.tutorial;
 
 import generated.dtos.ErrorResponse;
-import generated.dtos.LoginRequest;
-import generated.dtos.JwtResponse;
+import io.techchamps.tutorial.dto.JwtResponse;
+import io.techchamps.tutorial.dto.LoginRequest;
 import io.techchamps.tutorial.helpers.Helper;
 import org.junit.jupiter.api.Test;
 
