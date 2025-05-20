@@ -1,4 +1,4 @@
-# Readme for TechChamps-casus
+# Readme for TechChamps-tutorial
 
 ## Pre-requisites
 - Install Git: https://git-scm.com
@@ -17,6 +17,7 @@
 ## Generate open-api.yaml file
 - make sure the application is running
 - run from terminal `mvn springdoc-openapi:generate`
+- or run mvn clean install -DskipTests instead
 
 ### Backend:
   - in folder restbackend go to src/main/resources/java/Application.java
@@ -44,3 +45,7 @@ You can use:
 * admin, password admin1234, role admin and role user
 * user, password user1234, role user
 * moderator password moderator1234, role moderator
+
+## Presentation
+- You can find the presentation in the folder 'presentation'. 
+- It is in pdf format
